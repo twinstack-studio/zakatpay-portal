@@ -1,142 +1,187 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageSquare, X, Send, Bot, User, Sparkles } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { MessageSquare, X, Send, Bot, User, Loader2, Info } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { text: "As-salamu alaykum! 🙏 I am your ZakatPay Assistant. How can I help you today?", sender: "bot" }
+    { type: 'bot', text: 'As-salamu alaykum! 🙏 I am your ZakatPay Assistant. How can I help you today?' }
   ]);
-  const [inputValue, setInputValue] = useState("");
+  const [input, setInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
-
-  // Auto-scroll to bottom when a new message is added
+  
+  // Auto-scroll to bottom
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-  useEffect(() => { scrollToBottom(); }, [messages, isOpen]);
+  
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isTyping, isOpen]);
 
-  // Simple Bot Logic (Keywords matching)
-  const getBotResponse = (input) => {
-    const lowerInput = input.toLowerCase();
-    if (lowerInput.includes("salam") || lowerInput.includes("hello") || lowerInput.includes("hi")) {
-      return "Walaikum Assalam! Welcome to ZakatPay. How can I assist you with your Zakat or Sadaqah today?";
-    } else if (lowerInput.includes("nisab")) {
-      return "The current Nisab for Gold is 87.48 grams (7.5 tola) and for Silver is 612.36 grams (52.5 tola).";
-    } else if (lowerInput.includes("gold") || lowerInput.includes("silver")) {
-      return "Zakat is obligatory on gold/silver if it reaches the Nisab limit and a lunar year has passed. The Zakat rate is 2.5% of its current market value.";
-    } else if (lowerInput.includes("calculate") || lowerInput.includes("calculator")) {
-      return "You can calculate your Zakat exactly using our Smart Zakat Calculator from the top menu!";
-    } else if (lowerInput.includes("who") || lowerInput.includes("deserve") || lowerInput.includes("eligible")) {
-      return "Zakat can be given to 8 categories mentioned in the Quran (Surah At-Tawbah), including the poor, the needy, and those in debt.";
-    } else if (lowerInput.includes("tax") || lowerInput.includes("fbr")) {
-      return "Yes! All donations made through ZakatPay to our partner NGOs are fully tax-exempted under FBR Section 61.";
+  // Handle outside click for mobile
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling on mobile
     } else {
-      return "JazakAllah for your question. For detailed Shariah fatwas, please check our 'Islamic Rulings' page or contact our helpline at 0311-111-2222.";
+      document.body.style.overflow = 'unset';
     }
-  };
+    return () => { document.body.style.overflow = 'unset'; }
+  }, [isOpen]);
 
-  const handleSend = (e) => {
-    e.preventDefault();
-    if (!inputValue.trim()) return;
+  const quickReplies = [
+    "What is Nisab?",
+    "Tax Benefits",
+    "Is it secure?",
+    "How to pay?"
+  ];
 
-    const userMessage = { text: inputValue, sender: "user" };
-    setMessages((prev) => [...prev, userMessage]);
-    setInputValue("");
+  const handleSend = (text) => {
+    if (!text.trim()) return;
+    
+    // Add user message
+    setMessages(prev => [...prev, { type: 'user', text }]);
+    setInput('');
+    setIsTyping(true);
 
-    // Bot typing delay effect
+    // Simulate AI response based on keywords
     setTimeout(() => {
-      const botResponse = { text: getBotResponse(userMessage.text), sender: "bot" };
-      setMessages((prev) => [...prev, botResponse]);
-    }, 1000);
-  };
+      let botResponse = "I'm still learning! Please contact our human support at info@zakatpay.pk for detailed assistance.";
+      const lowerText = text.toLowerCase();
+      
+      if (lowerText.includes('nisab') || lowerText.includes('rate')) {
+        botResponse = "The current Nisab threshold is based on the value of 87.48 grams of gold or 612.36 grams of silver. Our calculator updates these rates automatically in real-time.";
+      } else if (lowerText.includes('tax') || lowerText.includes('exemption') || lowerText.includes('fbr')) {
+        botResponse = "Yes! All donations made through ZakatPay are eligible for tax rebates under Section 61 of the FBR Income Tax Ordinance. You can download the receipt from your dashboard.";
+      } else if (lowerText.includes('secure') || lowerText.includes('safe') || lowerText.includes('scam')) {
+        botResponse = "ZakatPay uses 256-bit bank-grade encryption. We do not store your credit card details. 100% of your funds are routed directly to FBR-verified foundations.";
+      } else if (lowerText.includes('fee') || lowerText.includes('charge')) {
+        botResponse = "ZakatPay charges 0% platform fees. We are independently funded, ensuring 100% of your donation reaches the chosen charity.";
+      } else if (lowerText.includes('hello') || lowerText.includes('salam')) {
+        botResponse = "Wa Alaikum As-salam! How can I assist you with your Zakat calculations or donations today?";
+      }
 
-  const handleQuickAction = (text) => {
-    setInputValue(text);
+      setMessages(prev => [...prev, { type: 'bot', text: botResponse }]);
+      setIsTyping(false);
+    }, 1500);
   };
 
   return (
     <>
-      {/* ========================================== */}
-      {/* 1. FLOATING CHAT BUTTON */}
-      {/* ========================================== */}
-      <button 
+      {/* Floating Action Button */}
+      <motion.button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 flex items-center justify-center text-white shadow-[0_10px_40px_rgba(236,72,153,0.5)] hover:scale-110 transition-transform duration-300 ${isOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'}`}
+        className={`w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 text-white flex items-center justify-center shadow-[0_10px_25px_rgba(236,72,153,0.5)] hover:scale-110 transition-transform ${isOpen ? 'hidden' : 'flex'}`}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
       >
-        <MessageSquare size={28} />
-      </button>
+        <MessageSquare size={24} className="md:w-7 md:h-7" />
+      </motion.button>
 
-      {/* ========================================== */}
-      {/* 2. CHAT WINDOW MODAL */}
-      {/* ========================================== */}
-      <div 
-        className={`fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50 w-[350px] max-w-[calc(100vw-2rem)] h-[550px] max-h-[calc(100vh-4rem)] bg-[#0a0a0c] border border-white/10 rounded-3xl shadow-2xl flex flex-col overflow-hidden transition-all duration-500 origin-bottom-right ${isOpen ? 'scale-100 opacity-100' : 'scale-0 opacity-0 pointer-events-none'}`}
-      >
-        {/* Chat Header */}
-        <div className="bg-gradient-to-r from-pink-600 to-purple-600 p-4 flex items-center justify-between shadow-md relative z-10">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md">
-              <Bot className="text-white" size={20} />
-            </div>
-            <div>
-              <h3 className="text-white font-black text-sm">ZakatPay Assistant</h3>
-              <p className="text-white/70 text-[10px] flex items-center gap-1"><Sparkles size={10} /> Always online</p>
-            </div>
-          </div>
-          <button onClick={() => setIsOpen(false)} className="text-white/70 hover:text-white transition-colors bg-white/10 w-8 h-8 rounded-full flex items-center justify-center">
-            <X size={18} />
-          </button>
-        </div>
-
-        {/* Chat Messages Area */}
-        <div className="flex-grow overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-[#050505] to-[#0a0a0c]">
-          {messages.map((msg, index) => (
-            <div key={index} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed ${
-                msg.sender === 'user' 
-                ? 'bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-br-none' 
-                : 'bg-white/10 text-slate-200 border border-white/5 rounded-bl-none'
-              }`}>
-                {msg.text}
+      {/* Chat Window */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.9 }}
+            transition={{ duration: 0.2 }}
+            // Mobile adjustments: full height or max-height based on screen, fixed to bottom
+            className="fixed inset-0 z-[100] md:inset-auto md:bottom-24 md:right-10 w-full md:w-[380px] h-[100dvh] md:h-[600px] bg-[#0a0a0c] md:rounded-3xl border-0 md:border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden"
+          >
+            {/* Header */}
+            <div className="bg-gradient-to-r from-pink-600 to-purple-600 p-4 flex items-center justify-between shadow-md shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center border border-white/30">
+                  <Bot size={22} className="text-white" />
+                </div>
+                <div>
+                  <h3 className="text-white font-bold text-sm md:text-base">ZakatPay Assistant</h3>
+                  <p className="text-pink-200 text-xs flex items-center gap-1">
+                    <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span> Always online
+                  </p>
+                </div>
               </div>
+              <button 
+                onClick={() => setIsOpen(false)} 
+                className="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors"
+              >
+                <X size={18} />
+              </button>
             </div>
-          ))}
-          <div ref={messagesEndRef} />
-        </div>
 
-        {/* Quick Suggestions Chips */}
-        {messages.length === 1 && (
-          <div className="p-3 bg-black border-t border-white/5 flex flex-wrap gap-2">
-            <button onClick={() => handleQuickAction("What is the Nisab today?")} className="bg-white/5 hover:bg-white/10 text-pink-400 border border-pink-500/30 text-[10px] px-3 py-1.5 rounded-full transition-colors">
-              What is Nisab?
-            </button>
-            <button onClick={() => handleQuickAction("Tax exemption on Zakat")} className="bg-white/5 hover:bg-white/10 text-purple-400 border border-purple-500/30 text-[10px] px-3 py-1.5 rounded-full transition-colors">
-              Tax Benefits
-            </button>
-          </div>
+            {/* Chat Area */}
+            <div className="flex-1 p-4 overflow-y-auto scrollbar-hide space-y-4 bg-gradient-to-b from-[#0a0a0c] to-[#121214]">
+              
+              {/* Trust Badge */}
+              <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl p-3 flex items-start gap-3 mb-6">
+                <Info size={16} className="text-purple-400 shrink-0 mt-0.5" />
+                <p className="text-xs text-slate-400 leading-relaxed">This is an automated assistant. For complex Shariah rulings, please consult your local religious scholar.</p>
+              </div>
+
+              {messages.map((msg, idx) => (
+                <div key={idx} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed shadow-sm ${
+                    msg.type === 'user' 
+                      ? 'bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-tr-sm' 
+                      : 'bg-white/10 text-slate-200 border border-white/5 rounded-tl-sm'
+                  }`}>
+                    {msg.text}
+                  </div>
+                </div>
+              ))}
+              
+              {isTyping && (
+                <div className="flex justify-start">
+                  <div className="bg-white/10 border border-white/5 p-3 rounded-2xl rounded-tl-sm flex items-center gap-2">
+                    <Loader2 size={16} className="text-pink-400 animate-spin" />
+                    <span className="text-xs text-slate-400">Assistant is typing...</span>
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Quick Replies & Input Area - Added pb-safe for mobile keyboards */}
+            <div className="p-4 bg-[#0a0a0c] border-t border-white/10 shrink-0 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+              {/* Quick Replies */}
+              <div className="flex overflow-x-auto scrollbar-hide gap-2 mb-3 pb-1">
+                {quickReplies.map((reply, i) => (
+                  <button 
+                    key={i}
+                    onClick={() => handleSend(reply)}
+                    className="whitespace-nowrap bg-white/5 hover:bg-pink-500/20 border border-white/10 hover:border-pink-500/50 text-slate-300 hover:text-pink-400 text-xs px-3 py-1.5 rounded-full transition-colors"
+                  >
+                    {reply}
+                  </button>
+                ))}
+              </div>
+
+              {/* Input Form */}
+              <form 
+                onSubmit={(e) => { e.preventDefault(); handleSend(input); }}
+                className="flex items-center gap-2"
+              >
+                <input 
+                  type="text" 
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Ask about Zakat..." 
+                  className="flex-1 bg-white/5 border border-white/10 rounded-full px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all"
+                />
+                <button 
+                  type="submit"
+                  disabled={!input.trim()}
+                  className="w-11 h-11 shrink-0 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transition-transform"
+                >
+                  <Send size={18} className="ml-1" />
+                </button>
+              </form>
+            </div>
+          </motion.div>
         )}
-
-        {/* Input Area */}
-        <div className="p-3 bg-[#0a0a0c] border-t border-white/10">
-          <form onSubmit={handleSend} className="flex items-center gap-2 relative">
-            <input 
-              type="text" 
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Ask about Zakat..." 
-              className="flex-grow bg-[#13141a] border border-white/10 rounded-full py-3 px-4 text-white text-sm outline-none focus:border-pink-500 transition-colors placeholder:text-slate-500"
-            />
-            <button 
-              type="submit" 
-              disabled={!inputValue.trim()}
-              className="w-11 h-11 bg-pink-600 hover:bg-pink-500 disabled:bg-white/10 disabled:text-slate-500 text-white rounded-full flex items-center justify-center flex-shrink-0 transition-colors shadow-lg"
-            >
-              <Send size={18} className="mr-0.5 mt-0.5" />
-            </button>
-          </form>
-        </div>
-      </div>
+      </AnimatePresence>
     </>
   );
 }
