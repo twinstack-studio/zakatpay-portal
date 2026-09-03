@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+body {
+  background-color: #000000;
+  color: #ffffff;
+  overflow-x: hidden;
+  font-family: 'Inter', system-ui, sans-serif;
+  scroll-behavior: smooth;
+  cursor: none;
+}
+
+a, button, input, select, textarea {
+  cursor: none !important;
+}
+
+/* Framer Signature Animations */
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(40px) scale(0.98); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+.framer-animate {
+  animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+
+/* The Ambient Background Glow */
+.ambient-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(16,185,129,0.15) 0%, rgba(0,0,0,0) 70%);
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+  pointer-events: none;
+  animation: glow-pulse 8s ease-in-out infinite;
+}
+
+/* Standardized Glass Card */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.5rem;
+  transition: all 0.4s ease;
+}
+.glass-panel:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(16, 185, 129, 0.3);
+  box-shadow: 0 10px 40px -10px rgba(16, 185, 129, 0.1);
+  transform: translateY(-4px);
+}
+
+/* Heavy Button Effects (Applied Globally) */
+.heavy-btn, button, .global-heavy-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+.heavy-btn::before, button::before, .global-heavy-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: all 0.5s ease;
+  z-index: 1;
+}
+
+.heavy-btn:hover, button:hover, .global-heavy-btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 15px 30px rgba(236, 72, 153, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.2);
+  filter: brightness(1.2);
+}
+
+.heavy-btn:hover::before, button:hover::before, .global-heavy-btn:hover::before {
+  left: 100%;
+}
+
+.heavy-btn:active, button:active, .global-heavy-btn:active {
+  transform: translateY(2px) scale(0.97);
+  box-shadow: 0 5px 10px rgba(236, 72, 153, 0.4);
+}
+
+.heavy-img-hover {
+  transition: all 0.5s ease;
+}
+.heavy-img-hover:hover {
+  transform: scale(1.1) rotate(2deg);
+  box-shadow: 0 20px 40px rgba(236, 72, 153, 0.3);
+}
