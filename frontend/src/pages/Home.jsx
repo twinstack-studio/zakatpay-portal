@@ -13,10 +13,10 @@ export default function HomePage() {
       {/* 1. NEW PREMIUM HERO SECTION */}
       {/* ========================================== */}
       <section className="relative pt-10 pb-16 sm:pt-16 sm:pb-24 lg:pt-24 lg:pb-32 px-4 sm:px-6 max-w-[1400px] mx-auto">
-        <div className="absolute top-1/4 left-0 w-[300px] lg:w-[500px] h-[300px] lg:h-[500px] bg-pink-600/10 rounded-full blur-[80px] lg:blur-[120px] pointer-events-none"></div>
+        <div className="absolute top-1/4 left-0 w-[300px] lg:w-[500px] h-[300px] lg:h-[500px] bg-pink-600/10 rounded-full blur-[80px] lg:blur-[70px] sm:blur-[120px] pointer-events-none"></div>
         <div className="absolute bottom-0 right-1/4 w-[400px] lg:w-[600px] h-[400px] lg:h-[600px] bg-purple-600/10 rounded-full blur-[100px] lg:blur-[150px] pointer-events-none"></div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-8 lg:gap-16 items-center relative z-10">
           
           {/* Left Side: Text Content */}
           <div className="space-y-6 lg:space-y-8 text-center lg:text-left pt-6 lg:pt-0">
@@ -64,14 +64,14 @@ export default function HomePage() {
       {/* ========================================== */}
       <section className="bg-[#0a0a0c] border-y border-white/5 py-16 lg:py-24 relative px-4 sm:px-6">
         <div className="max-w-[1400px] mx-auto">
-          <AnimatedSection direction="up" className="text-center mb-12 lg:mb-16">
+          <AnimatedSection direction="up" className="text-center mb-8 sm:mb-10 md:mb-12 lg:mb-16">
             <h2 className="text-3xl md:text-5xl font-black text-white mb-4">Why Choose <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-500">ZakatPay?</span></h2>
             <p className="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base">We provide a seamless, secure, and fully compliant digital ecosystem for your religious obligations.</p>
           </AnimatedSection>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
             <AnimatedSection direction="up" delay={0.1} className="bg-white/5 border border-white/10 p-6 lg:p-8 rounded-3xl hover:border-pink-500/50 transition-colors group">
-              <div className="w-12 h-12 lg:w-14 lg:h-14 bg-pink-500/10 text-pink-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 lg:w-14 lg:h-14 bg-pink-500/10 text-pink-400 rounded-2xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform">
                 <Calculator size={24} className="lg:w-7 lg:h-7" />
               </div>
               <h3 className="text-lg lg:text-xl font-bold text-white mb-3">Smart Calculator</h3>
@@ -79,7 +79,7 @@ export default function HomePage() {
             </AnimatedSection>
 
             <AnimatedSection direction="up" delay={0.2} className="bg-white/5 border border-white/10 p-6 lg:p-8 rounded-3xl hover:border-purple-500/50 transition-colors group">
-              <div className="w-12 h-12 lg:w-14 lg:h-14 bg-purple-500/10 text-purple-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 lg:w-14 lg:h-14 bg-purple-500/10 text-purple-400 rounded-2xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform">
                 <Globe size={24} className="lg:w-7 lg:h-7" />
               </div>
               <h3 className="text-lg lg:text-xl font-bold text-white mb-3">Direct NGO Transfers</h3>
@@ -87,7 +87,7 @@ export default function HomePage() {
             </AnimatedSection>
 
             <AnimatedSection direction="up" delay={0.3} className="bg-white/5 border border-white/10 p-6 lg:p-8 rounded-3xl hover:border-blue-500/50 transition-colors group">
-              <div className="w-12 h-12 lg:w-14 lg:h-14 bg-blue-500/10 text-blue-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 lg:w-14 lg:h-14 bg-blue-500/10 text-blue-400 rounded-2xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform">
                 <FileText size={24} className="lg:w-7 lg:h-7" />
               </div>
               <h3 className="text-lg lg:text-xl font-bold text-white mb-3">FBR Tax Receipts</h3>
@@ -95,7 +95,7 @@ export default function HomePage() {
             </AnimatedSection>
 
             <AnimatedSection direction="up" delay={0.4} className="bg-white/5 border border-white/10 p-6 lg:p-8 rounded-3xl hover:border-green-500/50 transition-colors group">
-              <div className="w-12 h-12 lg:w-14 lg:h-14 bg-green-500/10 text-green-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 lg:w-14 lg:h-14 bg-green-500/10 text-green-400 rounded-2xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform">
                 <Lock size={24} className="lg:w-7 lg:h-7" />
               </div>
               <h3 className="text-lg lg:text-xl font-bold text-white mb-3">100% Secure</h3>
@@ -112,12 +112,12 @@ export default function HomePage() {
         <div className="bg-gradient-to-br from-[#13141a] to-black border border-white/10 rounded-3xl lg:rounded-[3rem] p-6 sm:p-10 lg:p-16 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-full h-1 lg:h-2 bg-gradient-to-r from-pink-500 to-purple-600"></div>
           
-          <div className="text-center mb-10 lg:mb-16">
+          <div className="text-center mb-6 sm:mb-8 md:mb-10 lg:mb-16">
             <h2 className="text-3xl md:text-4xl font-black text-white mb-4">How It Works</h2>
             <p className="text-slate-400 text-sm sm:text-base">Three simple steps to fulfill your obligations.</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 lg:gap-12 relative">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-8 lg:gap-12 relative">
             <div className="hidden sm:block absolute top-10 left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
 
             <div className="relative text-center z-10">

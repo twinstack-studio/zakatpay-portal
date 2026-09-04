@@ -51,26 +51,26 @@ export function NewsletterCTA() {
   };
 
   return (
-    <div className="bg-gradient-to-r from-pink-600 to-purple-700 py-16 relative overflow-hidden">
+    <div className="bg-gradient-to-r from-pink-600 to-purple-700 py-12 sm:py-16 relative overflow-hidden">
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-black/10 rounded-full blur-3xl pointer-events-none"></div>
 
-      <div className="max-w-4xl mx-auto px-6 text-center relative z-10 framer-animate">
-        <h2 className="text-3xl md:text-4xl font-black text-white mb-4">Subscribe Our Newsletter</h2>
-        <p className="text-pink-100 text-sm md:text-base mb-8 max-w-2xl mx-auto">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10 framer-animate">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-3 sm:mb-4">Subscribe Our Newsletter</h2>
+        <p className="text-pink-100 text-xs sm:text-sm md:text-base mb-5 sm:mb-6 md:mb-8 max-w-2xl mx-auto">
           Our platform has a long tradition of serving humanity and empowering the underprivileged. Stay updated with our latest campaigns, tax exemption rules, and transparent impact reports.
         </p>
 
-        <form onSubmit={handleSubscribe} className="max-w-xl mx-auto relative flex items-center border-b border-white/50 pb-2 transition-all focus-within:border-white">
-          <Mail className="text-white/80 mr-3" size={20} />
+        <form onSubmit={handleSubscribe} className="max-w-xl mx-auto relative flex items-center gap-2 border-b border-white/50 pb-2 transition-all focus-within:border-white">
+          <Mail className="text-white/80 shrink-0" size={20} />
           <input 
             type="email" required placeholder="Type your email" 
             value={email} onChange={(e) => setEmail(e.target.value)} 
-            className="bg-transparent flex-grow text-white placeholder-white/60 outline-none text-lg" 
+            className="bg-transparent flex-grow min-w-0 text-white placeholder-white/60 outline-none text-base sm:text-lg" 
           />
           <button 
             type="submit" disabled={status === 'loading' || status === 'success'} 
-            className="bg-white text-purple-700 hover:text-pink-600 hover:scale-105 px-6 py-2.5 rounded-full font-bold text-sm transition-all flex items-center gap-2 shadow-lg disabled:opacity-80 disabled:hover:scale-100"
+            className="bg-white text-purple-700 hover:text-pink-600 hover:scale-105 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-bold text-xs sm:text-sm transition-all flex items-center gap-2 shrink-0 whitespace-nowrap shadow-lg disabled:opacity-80 disabled:hover:scale-100"
           >
             {status === 'loading' ? <Loader2 className="animate-spin" size={16}/> : 'Subscribe'}
             {status !== 'loading' && <Send size={14} />}
@@ -89,12 +89,12 @@ export function NewsletterCTA() {
 
 export function PlaceholderPage({ title, desc }) {
   return (
-    <div className="w-full py-32 text-center framer-animate">
-      <div className="inline-block p-6 rounded-full bg-white/5 border border-white/10 mb-6">
+    <div className="w-full py-20 sm:py-28 md:py-32 px-4 text-center framer-animate">
+      <div className="inline-block p-4 sm:p-6 rounded-full bg-white/5 border border-white/10 mb-5 sm:mb-6">
         <Activity size={48} className="text-pink-500 animate-pulse" />
       </div>
-      <h1 className="text-4xl md:text-6xl font-black text-white mb-4">{title}</h1>
-      <p className="text-slate-400 text-lg max-w-2xl mx-auto">{desc}</p>
+      <h1 className="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-4">{title}</h1>
+      <p className="text-slate-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto">{desc}</p>
       <div className="mt-8">
         <span className="bg-purple-500/20 text-purple-400 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest border border-purple-500/30">Coming Soon</span>
       </div>

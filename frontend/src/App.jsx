@@ -95,6 +95,29 @@ const translations = {
   'العربية': { home: 'الرئيسية', about: 'معلومات عنا', rulings: 'أحكام إسلامية', media: 'وسائط', calc: 'حاسبة الزكاة', foundations: 'مؤسسات خيرية', dashboard: 'لوحة المتبرع', partner: 'منظمة شريكة', payZakat: 'ادفع الزكاة', login: 'تسجيل الدخول' }
 };
 
+const languages = ['ENGLISH', 'اردو', 'العربية'];
+
+// Single source of truth for the nav dropdowns - the desktop mega menu and the
+// mobile drawer both render from these, so they can never drift apart.
+const aboutMenu = [
+  { to: '/about',              label: 'Introduction',        desc: 'Learn about ZakatPay' },
+  { to: '/chairmans-message',  label: "Chairman's Message", desc: 'Message from the leadership' },
+  { to: '/audit-reports',      label: 'Audit Reports',       desc: 'Financial transparency' },
+  { to: '/tax-exemption',      label: 'Tax Exemption',       desc: 'Tax deduction benefits' },
+  { to: '/e-book',             label: 'E-Book',              desc: 'Digital publications' },
+  { to: '/newsletter-archive', label: 'Newsletter',          desc: 'Subscribe & past editions' },
+  { to: '/privacy-policy',     label: 'Privacy Policy',      desc: 'Privacy information' },
+  { to: '/terms',              label: 'Terms & Conditions',  desc: 'Terms of service' },
+];
+
+const mediaMenu = [
+  { to: '/blogs',  label: 'Blogs',  desc: 'Read our latest articles',        icon: BookOpen,   color: 'text-pink-500',   hover: 'group-hover/item:text-pink-400' },
+  { to: '/news',   label: 'News',   desc: 'Platform updates & announcements', icon: Newspaper,  color: 'text-purple-500', hover: 'group-hover/item:text-purple-400' },
+  { to: '/videos', label: 'Videos', desc: 'Watch our impact stories',        icon: PlaySquare, color: 'text-pink-500',   hover: 'group-hover/item:text-pink-400' },
+];
+
+const mobileLinkClass = 'text-lg font-bold text-white py-4 border-b border-white/5 flex justify-between items-center';
+
 // === HEAVY 3D ANIMATED AYAT ===
 const AnimatedAyat = () => {
   const ayatText = "مَّثَلُ ٱلَّذِينَ يُنفِقُونَ أَمْوَٰلَهُمْ فِى سَبِيلِ ٱللَّهِ كَمَثَلِ حَبَّةٍ أَنۢبَتَتْ سَبْعَ سَنَابِلَ فِى كُلِّ سُنبُلَةٍ مِّا۟ئَةُ حَبَّةٍ ۗ وَٱللَّهُ يُضَـٰعِفُ لِمَن يَشَآءُ";
@@ -104,7 +127,7 @@ const AnimatedAyat = () => {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] md:w-[80%] h-[150%] bg-gradient-to-r from-pink-600/20 via-purple-600/20 to-indigo-600/20 blur-[80px] md:blur-[100px] -z-10 rounded-full animate-float-premium"></div>
       <motion.div initial={{ rotateX: 45, opacity: 0, y: 100, scale: 0.8 }} whileInView={{ rotateX: 0, opacity: 1, y: 0, scale: 1 }} transition={{ duration: 1.2, type: "spring", bounce: 0.3 }} viewport={{ once: false, margin: "-100px" }} className="relative transform-gpu">
         <motion.div animate={{ y: [0, -10, 0], rotateZ: [0, 1, -1, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}>
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-black mb-8 md:mb-12 leading-[2] md:leading-[2] flex flex-wrap justify-center gap-x-3 md:gap-x-5 gap-y-6 md:gap-y-8" dir="rtl">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-black mb-5 sm:mb-8 md:mb-12 leading-[2] md:leading-[2] flex flex-wrap justify-center gap-x-3 md:gap-x-5 gap-y-6 md:gap-y-8" dir="rtl">
             {words.map((word, i) => (
               <motion.span key={i} initial={{ opacity: 0, x: -50, filter: 'blur(10px)', rotateY: 90 }} whileInView={{ opacity: 1, x: 0, filter: 'blur(0px)', rotateY: 0 }} transition={{ duration: 0.8, delay: (words.length - i) * 0.15, ease: "easeOut" }} viewport={{ once: false }} className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-fuchsia-300 to-purple-500 animate-gradient-text drop-shadow-[0_5px_10px_rgba(236,72,153,0.5)] md:drop-shadow-[0_5px_15px_rgba(236,72,153,0.6)] hover:scale-110 md:hover:scale-125 transition-all duration-300">
                 {word}
@@ -132,6 +155,11 @@ export default function App() {
   const [language, setLanguage] = useState('ENGLISH');
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mobileSection, setMobileSection] = useState(null);
+
+  // Closing the drawer must also collapse any open accordion, otherwise it
+  // reopens in the same expanded state next time.
+  const closeMobileMenu = () => { setIsMobileMenuOpen(false); setMobileSection(null); };
   const langDropdownRef = useRef(null);
   const t = translations[language];
 
@@ -177,7 +205,7 @@ export default function App() {
 
       {/* === 1. TOP UTILITY BAR (Desktop Only) === */}
       <div className="bg-black border-b border-white/10 text-slate-300 py-3 hidden xl:block relative z-[60] nav-animate">
-        <div className="max-w-[1400px] mx-auto px-6 flex justify-end items-center gap-6 text-sm font-medium tracking-wide">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 flex justify-end items-center gap-6 text-sm font-medium tracking-wide">
           <a href="mailto:info@zakatpay.pk" className="flex items-center gap-2 hover:text-pink-400 transition-colors"><Mail size={16} className="text-slate-400"/> info@zakatpay.pk</a>
           <a href="https://wa.me/923111112222" className="flex items-center gap-2 hover:text-green-400 transition-colors"><MessageCircle size={16} className="text-green-500"/> 0311 111 2222</a>
           <a href="tel:+9221111925288" className="flex items-center gap-2 hover:text-purple-400 transition-colors"><Phone size={16} className="text-purple-500"/> +92 21 111 925 288</a>
@@ -188,7 +216,7 @@ export default function App() {
             </div>
             {isLangDropdownOpen && (
               <div className="absolute top-full right-0 mt-3 w-32 bg-[#0a0a0c] border border-white/10 shadow-2xl rounded-xl overflow-hidden z-[100]">
-                {['ENGLISH', 'اردو', 'العربية'].map((lang) => (
+                {languages.map((lang) => (
                   <button key={lang} onClick={() => { setLanguage(lang); setIsLangDropdownOpen(false); }} className={`w-full text-left px-4 py-3 text-xs font-bold transition-colors ${language === lang ? 'bg-pink-600 text-white' : 'text-slate-400 hover:bg-white/10 hover:text-white'}`} dir="ltr">
                     {lang}
                   </button>
@@ -211,7 +239,7 @@ export default function App() {
       {/* === 2. RESPONSIVE MEGA NAVBAR === */}
       <nav className="bg-black/95 backdrop-blur-xl border-b border-white/10 sticky top-0 z-50 nav-animate">
         <div className="max-w-[1400px] mx-auto px-4 md:px-6">
-          <div className="flex justify-between items-center h-20 md:h-24">
+          <div className="flex justify-between items-center h-16 sm:h-20 md:h-24">
             
             <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
               <CustomLogo />
@@ -224,14 +252,12 @@ export default function App() {
               <div className="relative group py-10">
                 <button className="flex items-center gap-1 text-slate-300 hover:text-pink-400 font-bold text-base transition-colors">{t.about} <ChevronDown size={16} /></button>
                 <div className="absolute top-[80px] left-1/2 -translate-x-1/2 w-[600px] bg-[#0a0a0a] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.8)] rounded-2xl p-8 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 grid grid-cols-2 gap-x-10 gap-y-6 text-left z-[100]">
-                  <Link to="/about" className="group/item block"><h5 className="text-white font-bold text-sm group-hover/item:text-pink-400 transition-colors">Introduction</h5><p className="text-slate-500 text-xs mt-1">Learn about ZakatPay</p></Link>
-                  <Link to="/chairmans-message" className="group/item block"><h5 className="text-white font-bold text-sm group-hover/item:text-pink-400 transition-colors">Chairman's Message</h5><p className="text-slate-500 text-xs mt-1">Message from the leadership</p></Link>
-                  <Link to="/audit-reports" className="group/item block"><h5 className="text-white font-bold text-sm group-hover/item:text-pink-400 transition-colors">Audit Reports</h5><p className="text-slate-500 text-xs mt-1">Financial transparency</p></Link>
-                  <Link to="/tax-exemption" className="group/item block"><h5 className="text-white font-bold text-sm group-hover/item:text-pink-400 transition-colors">Tax Exemption</h5><p className="text-slate-500 text-xs mt-1">Tax deduction benefits</p></Link>
-                  <Link to="/e-book" className="group/item block"><h5 className="text-white font-bold text-sm group-hover/item:text-pink-400 transition-colors">E-Book</h5><p className="text-slate-500 text-xs mt-1">Digital publications</p></Link>
-                  <Link to="/newsletter-archive" className="group/item block"><h5 className="text-white font-bold text-sm group-hover/item:text-pink-400 transition-colors">Newsletter</h5><p className="text-slate-500 text-xs mt-1">Subscribe & past editions</p></Link>
-                  <Link to="/privacy-policy" className="group/item block"><h5 className="text-white font-bold text-sm group-hover/item:text-pink-400 transition-colors">Privacy Policy</h5><p className="text-slate-500 text-xs mt-1">Privacy information</p></Link>
-                  <Link to="/terms" className="group/item block"><h5 className="text-white font-bold text-sm group-hover/item:text-pink-400 transition-colors">Terms & Conditions</h5><p className="text-slate-500 text-xs mt-1">Terms of service</p></Link>
+                  {aboutMenu.map((item) => (
+                    <Link key={item.to} to={item.to} className="group/item block">
+                      <h5 className="text-white font-bold text-sm group-hover/item:text-pink-400 transition-colors">{item.label}</h5>
+                      <p className="text-slate-500 text-xs mt-1">{item.desc}</p>
+                    </Link>
+                  ))}
                 </div>
               </div>
 
@@ -240,15 +266,15 @@ export default function App() {
               <div className="relative group py-10">
                 <button className="flex items-center gap-1 text-slate-300 hover:text-pink-400 font-bold text-base transition-colors">{t.media} <ChevronDown size={16} /></button>
                 <div className="absolute top-[80px] left-1/2 -translate-x-1/2 w-[320px] bg-[#0a0a0a] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.8)] rounded-2xl p-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 flex flex-col gap-4 text-left z-[100]">
-                  <Link to="/blogs" className="group/item flex items-start gap-4 hover:bg-white/5 p-2 rounded-xl transition-colors">
-                    <BookOpen size={20} className="text-pink-500 mt-1" /><div><h5 className="text-white font-bold text-sm group-hover/item:text-pink-400 transition-colors">Blogs</h5><p className="text-slate-500 text-xs mt-1">Read our latest articles</p></div>
-                  </Link>
-                  <Link to="/news" className="group/item flex items-start gap-4 hover:bg-white/5 p-2 rounded-xl transition-colors">
-                    <Newspaper size={20} className="text-purple-500 mt-1" /><div><h5 className="text-white font-bold text-sm group-hover/item:text-purple-400 transition-colors">News</h5><p className="text-slate-500 text-xs mt-1">Platform updates & announcements</p></div>
-                  </Link>
-                  <Link to="/videos" className="group/item flex items-start gap-4 hover:bg-white/5 p-2 rounded-xl transition-colors">
-                    <PlaySquare size={20} className="text-pink-500 mt-1" /><div><h5 className="text-white font-bold text-sm group-hover/item:text-pink-400 transition-colors">Videos</h5><p className="text-slate-500 text-xs mt-1">Watch our impact stories</p></div>
-                  </Link>
+                  {mediaMenu.map((item) => (
+                    <Link key={item.to} to={item.to} className="group/item flex items-start gap-4 hover:bg-white/5 p-2 rounded-xl transition-colors">
+                      <item.icon size={20} className={`${item.color} mt-1`} />
+                      <div>
+                        <h5 className={`text-white font-bold text-sm ${item.hover} transition-colors`}>{item.label}</h5>
+                        <p className="text-slate-500 text-xs mt-1">{item.desc}</p>
+                      </div>
+                    </Link>
+                  ))}
                 </div>
               </div>
 
@@ -280,10 +306,21 @@ export default function App() {
             </div>
 
             {/* Mobile Hamburger Icon (Visible on small screens) */}
-            <div className="xl:hidden flex items-center gap-4">
-              <Link to="/foundations" className="bg-gradient-to-r from-pink-600 to-purple-600 text-white px-4 py-2 rounded-full font-bold text-[11px] uppercase tracking-widest shadow-lg">Donate</Link>
-              <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-white p-2 bg-white/5 rounded-xl border border-white/10 active:scale-95 transition-transform">
-                {isMobileMenuOpen ? <X size={24} className="text-pink-500"/> : <Menu size={24} />}
+            <div className="xl:hidden flex items-center gap-2 sm:gap-3">
+              {/* Explicit h-* keeps the 44px mobile tap-target rule in index.css
+                  from stretching this pill out of proportion with the bar. */}
+              <Link
+                to="/foundations"
+                className="h-9 sm:h-10 px-3.5 sm:px-5 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-full font-bold text-[10px] sm:text-[11px] uppercase tracking-wide sm:tracking-widest shadow-lg flex items-center justify-center whitespace-nowrap"
+              >
+                Donate
+              </Link>
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+                className="h-9 w-9 sm:h-10 sm:w-10 shrink-0 text-white bg-white/5 rounded-xl border border-white/10 flex items-center justify-center active:scale-95 transition-transform"
+              >
+                {isMobileMenuOpen ? <X size={20} className="text-pink-500"/> : <Menu size={20} />}
               </button>
             </div>
 
@@ -299,44 +336,141 @@ export default function App() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[45] bg-[#050505]/95 backdrop-blur-xl pt-24 pb-6 px-6 overflow-y-auto xl:hidden border-b border-white/10"
+            className="fixed inset-0 z-[45] bg-[#050505]/98 backdrop-blur-xl pt-24 pb-16 px-4 sm:px-6 overflow-y-auto overscroll-contain xl:hidden border-b border-white/10"
           >
             <div className="flex flex-col gap-2">
               {/* Mobile Auth Section */}
               {user ? (
                 <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-r from-pink-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-10 h-10 shrink-0 bg-gradient-to-r from-pink-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
                       {user.name.charAt(0).toUpperCase()}
                     </div>
-                    <span className="text-white font-bold">{user.name}</span>
+                    <span className="text-white font-bold truncate">{user.name}</span>
                   </div>
-                  <button onClick={() => {handleLogout(); setIsMobileMenuOpen(false);}} className="text-red-400 p-2"><LogOut size={20}/></button>
+                  <button onClick={() => {handleLogout(); closeMobileMenu();}} className="text-red-400 p-2 shrink-0"><LogOut size={20}/></button>
                 </div>
               ) : (
-                <button onClick={() => { setIsAuthModalOpen(true); setIsMobileMenuOpen(false); }} className="w-full bg-white/5 border border-white/10 py-4 rounded-2xl flex items-center justify-center gap-2 text-white font-bold mb-4">
-                  <User size={20} className="text-purple-400" /> Login to ZakatPay
+                <button onClick={() => { setIsAuthModalOpen(true); closeMobileMenu(); }} className="w-full bg-white/5 border border-white/10 py-4 rounded-2xl flex items-center justify-center gap-2 text-white font-bold mb-4">
+                  <User size={20} className="text-purple-400" /> {t.login}
                 </button>
               )}
 
+              {/* Primary CTAs - mirrors the desktop utility bar */}
+              <div className="grid grid-cols-2 gap-3 mb-2">
+                <Link to="/partner-ngo" onClick={closeMobileMenu} className="bg-purple-900/40 border border-purple-500/50 text-white py-3 rounded-xl font-bold text-xs text-center flex items-center justify-center">
+                  {t.partner}
+                </Link>
+                <Link to="/foundations" onClick={closeMobileMenu} className="bg-gradient-to-r from-pink-600 to-purple-600 text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow-lg">
+                  {t.payZakat} <Heart size={13} className="fill-white" />
+                </Link>
+              </div>
+
               {/* Mobile Links */}
-              <Link to="/" className="text-lg font-bold text-white py-4 border-b border-white/5 flex justify-between items-center">Home <ArrowRight size={16} className="text-slate-500"/></Link>
-              <Link to="/about" className="text-lg font-bold text-white py-4 border-b border-white/5 flex justify-between items-center">About ZakatPay <ArrowRight size={16} className="text-slate-500"/></Link>
-              <Link to="/calculator" className="text-lg font-bold text-white py-4 border-b border-white/5 flex justify-between items-center">Zakat Calculator <ArrowRight size={16} className="text-slate-500"/></Link>
-              <Link to="/foundations" className="text-lg font-bold text-white py-4 border-b border-white/5 flex justify-between items-center">Verified Foundations <ArrowRight size={16} className="text-slate-500"/></Link>
-              <Link to="/dashboard" className="text-lg font-bold text-white py-4 border-b border-white/5 flex justify-between items-center">Donor Dashboard <ArrowRight size={16} className="text-slate-500"/></Link>
-              <Link to="/islamic-rulings" className="text-lg font-bold text-white py-4 border-b border-white/5 flex justify-between items-center">Islamic Rulings <ArrowRight size={16} className="text-slate-500"/></Link>
-              <Link to="/blogs" className="text-lg font-bold text-white py-4 border-b border-white/5 flex justify-between items-center">Blogs & Articles <ArrowRight size={16} className="text-slate-500"/></Link>
-              
-              {/* 🌟 NEW: Mobile FAQ Link */}
-              <Link to="/faqs" className="text-lg font-bold text-white py-4 border-b border-white/5 flex justify-between items-center">FAQs & Help Center <ArrowRight size={16} className="text-slate-500"/></Link>
+              <Link to="/" onClick={closeMobileMenu} className={mobileLinkClass}>{t.home} <ArrowRight size={16} className="text-slate-500"/></Link>
+
+              {/* About - accordion mirroring the desktop mega menu */}
+              <div className="border-b border-white/5">
+                <button
+                  onClick={() => setMobileSection(mobileSection === 'about' ? null : 'about')}
+                  className="w-full text-lg font-bold text-white py-4 flex justify-between items-center bg-transparent shadow-none"
+                >
+                  {t.about}
+                  <ChevronDown size={18} className={`text-slate-500 transition-transform duration-300 ${mobileSection === 'about' ? 'rotate-180 text-pink-400' : ''}`} />
+                </button>
+                <AnimatePresence initial={false}>
+                  {mobileSection === 'about' && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pb-3 pl-3 border-l-2 border-pink-500/30 ml-1 flex flex-col">
+                        {aboutMenu.map((item) => (
+                          <Link key={item.to} to={item.to} onClick={closeMobileMenu} className="py-3 px-2 rounded-lg active:bg-white/5">
+                            <span className="block text-white font-bold text-sm">{item.label}</span>
+                            <span className="block text-slate-500 text-xs mt-0.5">{item.desc}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <Link to="/islamic-rulings" onClick={closeMobileMenu} className={mobileLinkClass}>{t.rulings} <ArrowRight size={16} className="text-slate-500"/></Link>
+
+              {/* Media - accordion mirroring the desktop dropdown */}
+              <div className="border-b border-white/5">
+                <button
+                  onClick={() => setMobileSection(mobileSection === 'media' ? null : 'media')}
+                  className="w-full text-lg font-bold text-white py-4 flex justify-between items-center bg-transparent shadow-none"
+                >
+                  {t.media}
+                  <ChevronDown size={18} className={`text-slate-500 transition-transform duration-300 ${mobileSection === 'media' ? 'rotate-180 text-pink-400' : ''}`} />
+                </button>
+                <AnimatePresence initial={false}>
+                  {mobileSection === 'media' && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pb-3 pl-3 border-l-2 border-purple-500/30 ml-1 flex flex-col">
+                        {mediaMenu.map((item) => (
+                          <Link key={item.to} to={item.to} onClick={closeMobileMenu} className="py-3 px-2 rounded-lg active:bg-white/5 flex items-start gap-3">
+                            <item.icon size={18} className={`${item.color} mt-0.5 shrink-0`} />
+                            <span>
+                              <span className="block text-white font-bold text-sm">{item.label}</span>
+                              <span className="block text-slate-500 text-xs mt-0.5">{item.desc}</span>
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <Link to="/calculator" onClick={closeMobileMenu} className={mobileLinkClass}>{t.calc} <ArrowRight size={16} className="text-slate-500"/></Link>
+              <Link to="/foundations" onClick={closeMobileMenu} className={mobileLinkClass}>{t.foundations} <ArrowRight size={16} className="text-slate-500"/></Link>
+              <Link to="/dashboard" onClick={closeMobileMenu} className={mobileLinkClass}>{t.dashboard} <ArrowRight size={16} className="text-slate-500"/></Link>
+              <Link to="/faqs" onClick={closeMobileMenu} className={mobileLinkClass}>FAQs &amp; Help Center <ArrowRight size={16} className="text-slate-500"/></Link>
 
               {/* Admin Link for Mobile */}
               {user && ((user.name && user.name.toLowerCase().includes('ahmad nadeem')) || (user.email && user.email.toLowerCase().includes('admin'))) && (
-                <Link to="/admin" className="text-lg font-bold text-pink-400 py-4 border-b border-white/5 flex justify-between items-center">
+                <Link to="/admin" onClick={closeMobileMenu} className="text-lg font-bold text-pink-400 py-4 border-b border-white/5 flex justify-between items-center">
                   <span className="flex items-center gap-2"><Shield size={18}/> Admin Panel</span> <ArrowRight size={16} className="text-pink-500"/>
                 </Link>
               )}
+
+              {/* Language switcher - mirrors the desktop utility bar */}
+              <div className="mt-6">
+                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-2"><Globe size={13}/> Language</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {languages.map((lang) => (
+                    <button
+                      key={lang}
+                      onClick={() => setLanguage(lang)}
+                      dir="ltr"
+                      className={`py-2.5 rounded-xl text-xs font-bold transition-colors ${language === lang ? 'bg-pink-600 text-white' : 'bg-white/5 border border-white/10 text-slate-400'}`}
+                    >
+                      {lang}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Contact block - mirrors the desktop utility bar */}
+              <div className="mt-6 pt-5 border-t border-white/10 flex flex-col gap-3" dir="ltr">
+                <a href="mailto:info@zakatpay.pk" className="flex items-center gap-3 text-slate-300 text-sm"><Mail size={16} className="text-slate-500 shrink-0"/> info@zakatpay.pk</a>
+                <a href="https://wa.me/923111112222" className="flex items-center gap-3 text-slate-300 text-sm"><MessageCircle size={16} className="text-green-500 shrink-0"/> 0311 111 2222</a>
+                <a href="tel:+9221111925288" className="flex items-center gap-3 text-slate-300 text-sm"><Phone size={16} className="text-purple-500 shrink-0"/> +92 21 111 925 288</a>
+              </div>
             </div>
           </motion.div>
         )}
@@ -374,7 +508,7 @@ export default function App() {
             <Route path="/foundation/:id" element={<PageWrapper title="Organization Info"><FoundationDetail /></PageWrapper>} />
             <Route path="/partner-ngo" element={<PageWrapper title="Partner NGO"><PartnerNGO /></PageWrapper>} />
             <Route path="/receipts" element={<PageWrapper title="Ledger"><div className="py-8"><DonationHistory user={user} /></div></PageWrapper>} />
-            <Route path="/dashboard" element={<PageWrapper title="Dashboard"><div className="py-8 max-w-[1400px] mx-auto px-4 md:px-6"><Dashboard user={user} /></div></PageWrapper>} />
+            <Route path="/dashboard" element={<PageWrapper title="Dashboard"><div className="py-8 max-w-[1400px] mx-auto px-4 md:px-6"><Dashboard user={user} onLogin={() => setIsAuthModalOpen(true)} /></div></PageWrapper>} />
             
             {/* Admin Route */}
             <Route path="/admin" element={<AdminDashboard />} />
@@ -392,15 +526,15 @@ export default function App() {
       <footer className="bg-black text-white pt-16 pb-8 relative overflow-hidden px-4 md:px-6" dir="ltr">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-1 bg-gradient-to-r from-transparent via-pink-500 to-transparent opacity-50"></div>
         <div className="max-w-[1400px] mx-auto relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-8 sm:mb-10 md:mb-12">
             <div>
-              <div className="mb-6">
+              <div className="mb-4 sm:mb-6">
                 <CustomLogo />
               </div>
-              <p className="text-slate-400 text-sm leading-relaxed mb-6">ZakatPay is your dedicated digital portal for calculating Zakat and distributing Sadaqah. 100% transparent, Shariah-compliant, and FBR-approved.</p>
+              <p className="text-slate-400 text-sm leading-relaxed mb-4 sm:mb-6">ZakatPay is your dedicated digital portal for calculating Zakat and distributing Sadaqah. 100% transparent, Shariah-compliant, and FBR-approved.</p>
             </div>
             <div>
-              <h4 className="text-white font-bold text-lg mb-6 relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-1 after:bg-pink-500">Explore</h4>
+              <h4 className="text-white font-bold text-lg mb-4 sm:mb-6 relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-1 after:bg-pink-500">Explore</h4>
               <ul className="space-y-3">
                 <li><Link to="/calculator" className="text-slate-400 hover:text-pink-400 transition-colors text-sm">Zakat Calculator</Link></li>
                 <li><Link to="/about" className="text-slate-400 hover:text-pink-400 transition-colors text-sm">Who We Are</Link></li>
@@ -409,7 +543,7 @@ export default function App() {
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-bold text-lg mb-6 relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-1 after:bg-purple-500">Quick Links</h4>
+              <h4 className="text-white font-bold text-lg mb-4 sm:mb-6 relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-1 after:bg-purple-500">Quick Links</h4>
               <ul className="space-y-4">
                 <li><Link to="/privacy-policy" className="text-sm font-bold text-slate-300 hover:text-white transition-colors cursor-pointer">Privacy Policy</Link></li>
                 <li><Link to="/terms" className="text-sm font-bold text-slate-300 hover:text-white transition-colors cursor-pointer">Terms & Conditions</Link></li>
@@ -419,7 +553,7 @@ export default function App() {
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-bold text-lg mb-6 relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-1 after:bg-pink-500">Contact Us</h4>
+              <h4 className="text-white font-bold text-lg mb-4 sm:mb-6 relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-12 after:h-1 after:bg-pink-500">Contact Us</h4>
               <div className="space-y-4">
                 <p className="text-slate-400 text-sm">Helpline: <span className="text-white">+92 21 111-925-288</span></p>
                 <p className="text-slate-400 text-sm">Email: <span className="text-white">info@zakatpay.pk</span></p>
@@ -437,9 +571,10 @@ export default function App() {
 
       <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} setUser={setUser} />
       
-      <div className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[9999] drop-shadow-[0_10px_20px_rgba(236,72,153,0.5)]">
-        <Chatbot />
-      </div>
+      {/* Chatbot positions itself (fixed). It must NOT be wrapped in an element
+          with a filter/transform - that would become the containing block for its
+          fixed-position panel and collapse the mobile full-screen view. */}
+      <Chatbot />
 
       <CustomCursor />
       

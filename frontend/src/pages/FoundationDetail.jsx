@@ -38,8 +38,8 @@ export default function FoundationDetail() {
 
   if (!ngo) {
     return (
-      <div className="py-32 text-center text-white">
-        <h2 className="text-3xl font-bold mb-4">Foundation Not Found</h2>
+      <div className="py-16 sm:py-24 md:py-32 text-center text-white">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4">Foundation Not Found</h2>
         <Link to="/foundations" className="text-pink-400 hover:underline">Return to Foundations</Link>
       </div>
     );
@@ -55,16 +55,16 @@ export default function FoundationDetail() {
       {/* ========================================== */}
       {/* 1. HERO SECTION */}
       {/* ========================================== */}
-      <div className="max-w-[1400px] mx-auto px-6 pt-12 pb-16 lg:pb-24 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 pt-12 pb-16 lg:pb-24 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         
         {/* Left Side: Text Content */}
         <div className="space-y-8 order-2 lg:order-1">
           <div>
-            <Link to="/foundations" className={`inline-flex items-center gap-2 font-bold text-sm mb-8 transition-colors w-fit text-slate-400 hover:${ngo.textClass}`}>
+            <Link to="/foundations" className={`inline-flex items-center gap-2 font-bold text-sm mb-5 sm:mb-8 transition-colors w-fit text-slate-400 hover:${ngo.textClass}`}>
               <ArrowLeft size={16} /> Back to Foundations
             </Link>
             
-            <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-3 mb-4 sm:mb-6">
               <span className={`bg-gradient-to-r ${ngo.color} text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest`}>
                 {ngo.category}
               </span>
@@ -73,14 +73,14 @@ export default function FoundationDetail() {
               </span>
             </div>
             
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.1] mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[1.15] sm:leading-[1.1] mb-4 sm:mb-6">
               Welcome to <br />
               <span className={`text-transparent bg-clip-text bg-gradient-to-r ${ngo.color}`}>
                 {ngo.name}
               </span>
             </h1>
             
-            <p className="text-slate-400 text-lg md:text-xl leading-relaxed max-w-lg mb-4">
+            <p className="text-slate-400 text-sm sm:text-base md:text-lg md:text-xl leading-relaxed max-w-lg mb-4">
               {ngo.shortDesc}
             </p>
             <p className="text-slate-500 font-medium">
@@ -104,7 +104,7 @@ export default function FoundationDetail() {
           {ngo.stats && ngo.stats.length > 0 && (
             <div className={`absolute -bottom-6 md:bottom-4 left-4 md:-left-8 w-[90%] md:w-80 bg-black/80 backdrop-blur-2xl ${ngo.borderClass} border p-5 rounded-3xl shadow-2xl flex justify-between items-center`}>
               <div>
-                <h4 className="text-2xl font-black text-white mb-1">{ngo.stats[0].value}</h4>
+                <h4 className="text-lg sm:text-xl md:text-2xl font-black text-white mb-1">{ngo.stats[0].value}</h4>
                 <p className="text-slate-300 text-[10px] font-bold uppercase tracking-widest">
                   {ngo.stats[0].label}
                 </p>
@@ -121,13 +121,13 @@ export default function FoundationDetail() {
       {/* ========================================== */}
       {/* 2. MAIN CONTENT SECTION */}
       {/* ========================================== */}
-      <div className="max-w-[1400px] mx-auto px-6 mt-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 mt-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
         
         {/* Left Side: Heavy Detailed Content */}
         <div className="lg:col-span-2 space-y-12">
           
           <section>
-            <h2 className="text-3xl font-black text-white mb-8">About the Organization</h2>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-5 sm:mb-8">About the Organization</h2>
             
             <div className="space-y-6 text-slate-400 leading-loose text-lg">
               {ngo.longDesc.split('\n\n').map((paragraph, index) => (
@@ -136,8 +136,8 @@ export default function FoundationDetail() {
             </div>
           </section>
 
-          <section className={`bg-white/5 border ${ngo.borderClass} p-8 md:p-10 rounded-[2rem]`}>
-            <div className="flex items-center gap-4 mb-6">
+          <section className={`bg-white/5 border ${ngo.borderClass} p-5 sm:p-8 md:p-10 rounded-[2rem]`}>
+            <div className="flex items-center gap-4 mb-4 sm:mb-6">
               <div className={`w-14 h-14 ${ngo.bgClass} ${ngo.textClass} rounded-2xl flex items-center justify-center`}>
                 <Target size={28} />
               </div>
@@ -149,12 +149,12 @@ export default function FoundationDetail() {
           </section>
 
           <section>
-            <h3 className="text-2xl font-bold text-white mb-6">Impact Statistics</h3>
-            <div className="grid grid-cols-2 gap-6">
+            <h3 className="text-2xl font-bold text-white mb-4 sm:mb-6">Impact Statistics</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {ngo.stats.map((stat, index) => (
-                <div key={index} className={`bg-[#0a0a0c] border ${ngo.borderClass} p-8 rounded-3xl group hover:bg-white/5 transition-colors`}>
+                <div key={index} className={`bg-[#0a0a0c] border ${ngo.borderClass} p-5 sm:p-8 rounded-2xl sm:rounded-3xl group hover:bg-white/5 transition-colors`}>
                   <Heart className={`${ngo.textClass} mb-4 group-hover:scale-110 transition-transform`} size={28} />
-                  <p className="text-4xl font-black text-white mb-2">{stat.value}</p>
+                  <p className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-2">{stat.value}</p>
                   <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">{stat.label}</p>
                 </div>
               ))}
@@ -167,8 +167,8 @@ export default function FoundationDetail() {
         <div className="space-y-6">
           
           {/* Contact Information */}
-          <div className="bg-[#0a0a0c] border border-white/10 p-8 rounded-3xl">
-            <h3 className="text-xl font-bold text-white mb-6 border-b border-white/10 pb-4">Contact Information</h3>
+          <div className="bg-[#0a0a0c] border border-white/10 p-5 sm:p-8 rounded-2xl sm:rounded-3xl">
+            <h3 className="text-xl font-bold text-white mb-4 sm:mb-6 border-b border-white/10 pb-4">Contact Information</h3>
             <ul className="space-y-6">
               <li className="flex items-start gap-4 group">
                 <div className={`w-10 h-10 rounded-full ${ngo.bgClass} flex items-center justify-center flex-shrink-0 transition-colors`}>
@@ -207,7 +207,7 @@ export default function FoundationDetail() {
           </div>
 
           {/* NEW SECTION: Shariah Compliant & Transparency */}
-          <div className={`bg-gradient-to-br from-[#13141a] to-[#050505] border ${ngo.borderClass} p-8 rounded-3xl relative overflow-hidden group`}>
+          <div className={`bg-gradient-to-br from-[#13141a] to-[#050505] border ${ngo.borderClass} p-5 sm:p-8 rounded-2xl sm:rounded-3xl relative overflow-hidden group`}>
             <div className={`absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r ${ngo.color}`}></div>
             
             {/* Background Watermark Icon */}
@@ -223,11 +223,11 @@ export default function FoundationDetail() {
                 <h3 className="text-xl font-bold text-white leading-tight">100% Shariah Compliant</h3>
               </div>
               
-              <p className="text-slate-400 text-sm mb-6 leading-relaxed">
+              <p className="text-slate-400 text-sm mb-4 sm:mb-6 leading-relaxed">
                 Your donations to <span className={`font-bold ${ngo.textClass}`}>{ngo.name}</span> are strictly routed through verified Zakat channels with zero platform commission.
               </p>
 
-              <ul className="space-y-3 mb-8">
+              <ul className="space-y-3 mb-5 sm:mb-8">
                 <li className="flex items-center gap-2 text-xs text-slate-300 font-medium">
                   <CheckCircle2 size={16} className={ngo.textClass} /> Fully FBR Tax Exempted
                 </li>

@@ -64,10 +64,22 @@ a, button, input, select, textarea {
 
 /* Heavy Button Effects (Applied Globally) */
 .heavy-btn, button, .global-heavy-btn {
-  position: relative;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* `position: relative` is only here so the ::before shimmer has a positioned
+   ancestor - but this file is UNLAYERED, and unlayered rules beat everything in
+   @layer utilities where Tailwind lives. Declaring it on a bare `button`
+   selector therefore silently overrode `fixed`/`absolute`/`sticky` utilities
+   (it pulled the chatbot FAB out of fixed positioning entirely).
+   So: skip any button that a utility has already positioned - those are
+   positioned ancestors in their own right, so the shimmer still works. */
+.heavy-btn:not(.fixed):not(.absolute):not(.sticky),
+button:not(.fixed):not(.absolute):not(.sticky),
+.global-heavy-btn:not(.fixed):not(.absolute):not(.sticky) {
+  position: relative;
 }
 
 .heavy-btn::before, button::before, .global-heavy-btn::before {
@@ -103,4 +115,72 @@ a, button, input, select, textarea {
 .heavy-img-hover:hover {
   transform: scale(1.1) rotate(2deg);
   box-shadow: 0 20px 40px rgba(236, 72, 153, 0.3);
+}
+/* ==========================================================
+   RESPONSIVE FOUNDATIONS
+   ========================================================== */
+
+/* Koi bhi element horizontal scroll na banaye.
+   NOTE: overflow-x:hidden on <html> makes it the scroll container, which breaks
+   position:fixed (chatbot FAB, sticky nav) on several mobile browsers.
+   overflow-x:clip trims the overflow WITHOUT creating a scroll container,
+   so fixed elements keep sticking to the viewport while scrolling. */
+html {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+/* Media hamesha container ke andar rahe */
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Touch devices: native cursor wapas, custom cursor wahan render hi nahi hota */
+@media (pointer: coarse) {
+  body { cursor: auto; }
+  a, button, input, select, textarea { cursor: auto !important; }
+}
+
+/* Hover effects sirf un devices par jahan asli hover hai.
+   Touch par yeh "stuck hover" state bana dete the. */
+@media (hover: none) {
+  .heavy-btn:hover, button:hover, .global-heavy-btn:hover,
+  .glass-panel:hover, .heavy-img-hover:hover {
+    transform: none;
+    filter: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* Ambient glow viewport se bahar na jaye */
+.ambient-glow {
+  width: min(600px, 130vw);
+  height: min(600px, 130vw);
+}
+
+/* Mobile par tap target minimum 44px (Apple/Google guideline).
+   Skip anything that declares its own height utility (h-10, sm:h-14, ...),
+   otherwise square icon buttons get stretched into ovals. */
+@media (max-width: 767px) {
+  button:not([class*="h-"]),
+  a[class*="rounded-full"]:not([class*="h-"]),
+  input:not([class*="h-"]),
+  select {
+    min-height: 44px;
+  }
+  /* Zoom-on-focus rokne ke liye iOS par input font >= 16px chahiye */
+  input, select, textarea {
+    font-size: 16px;
+  }
+}
+
+/* Bohot chhoti screens (320px - Galaxy Fold / iPhone SE) */
+@media (max-width: 360px) {
+  body { font-size: 14px; }
 }

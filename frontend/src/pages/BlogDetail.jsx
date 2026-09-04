@@ -16,8 +16,8 @@ export default function BlogDetail() {
 
   if (!blog) {
     return (
-      <div className="py-32 text-center text-white">
-        <h2 className="text-3xl font-bold mb-4">Article Not Found</h2>
+      <div className="py-16 sm:py-24 md:py-32 text-center text-white">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4">Article Not Found</h2>
         <Link to="/blogs" className="text-pink-400 hover:underline">Return to Blogs</Link>
       </div>
     );
@@ -26,19 +26,19 @@ export default function BlogDetail() {
   return (
     <div className="w-full pb-24 framer-animate">
       {/* Back Button */}
-      <div className="max-w-[800px] mx-auto px-6 pt-10 pb-6">
+      <div className="max-w-[800px] mx-auto px-4 sm:px-6 pt-8 sm:pt-10 pb-6">
         <Link to="/blogs" className="text-pink-400 font-bold text-sm flex items-center gap-2 hover:text-pink-300 transition-colors w-fit bg-white/5 px-4 py-2 rounded-full border border-pink-500/20">
           <ArrowLeft size={16} /> Back to Blogs
         </Link>
       </div>
 
-      <article className="max-w-[800px] mx-auto px-6">
+      <article className="max-w-[800px] mx-auto px-4 sm:px-6">
         {/* Blog Header */}
-        <div className="mb-8">
+        <div className="mb-5 sm:mb-8">
           <div className="flex items-center gap-2 text-pink-400 text-[10px] font-bold uppercase tracking-widest mb-4">
             <Tag size={12} /> {blog.category}
           </div>
-          <h1 className="text-3xl md:text-5xl font-black text-white leading-tight mb-6">
+          <h1 className="text-3xl md:text-5xl font-black text-white leading-tight mb-4 sm:mb-6">
             {blog.title}
           </h1>
           <div className="flex flex-wrap items-center gap-6 text-sm text-slate-400 font-medium border-y border-white/10 py-4">
@@ -48,13 +48,13 @@ export default function BlogDetail() {
         </div>
 
         {/* Hero Image */}
-        <div className="w-full h-[300px] md:h-[450px] rounded-3xl overflow-hidden mb-10 border border-white/10 shadow-2xl">
+        <div className="w-full h-[300px] md:h-[450px] rounded-3xl overflow-hidden mb-6 sm:mb-8 md:mb-10 border border-white/10 shadow-2xl">
           <img src={blog.image} alt={blog.title} className="w-full h-full object-cover" />
         </div>
 
         {/* Blog Content */}
         <div className="bg-[#0a0a0c] border border-white/10 p-6 md:p-10 rounded-3xl shadow-lg">
-          <p className="text-lg md:text-xl text-slate-300 font-medium italic mb-8 border-l-4 border-pink-500 pl-4">
+          <p className="text-lg md:text-xl text-slate-300 font-medium italic mb-5 sm:mb-8 border-l-4 border-pink-500 pl-4">
             {blog.excerpt}
           </p>
           

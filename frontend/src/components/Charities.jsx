@@ -25,8 +25,8 @@ export default function Charities({ user }) {
 
   return (
     <div className="max-w-7xl mx-auto px-4">
-      <div className="text-center mb-12">
-        <h2 className="text-4xl font-black text-white mb-4 tracking-tight">Verified Organizations</h2>
+      <div className="text-center mb-8 sm:mb-10 md:mb-12">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-4 tracking-tight">Verified Organizations</h2>
         <p className="text-slate-400">Distribute your Zakat safely to FBR-approved charities.</p>
       </div>
 
@@ -34,7 +34,7 @@ export default function Charities({ user }) {
         {charitiesList.map((charity) => (
           <div key={charity.id} className="bg-white/5 p-6 rounded-2xl border border-white/10 flex flex-col justify-between hover:border-pink-500/50 transition-all group relative">
             <div>
-              <div className="flex justify-between items-start mb-6">
+              <div className="flex justify-between items-start mb-4 sm:mb-6">
                 <div className="w-14 h-14 bg-pink-500/10 rounded-2xl flex items-center justify-center text-pink-500 shadow-inner">
                   <Heart size={28} className="group-hover:scale-110 transition-transform" />
                 </div>
@@ -52,7 +52,7 @@ export default function Charities({ user }) {
               </div>
               <span className="text-xs font-bold text-purple-400 uppercase tracking-wider">{charity.category}</span>
               <h3 className="text-xl font-bold text-white mt-2 mb-2 leading-tight">{charity.name}</h3>
-              <p className="text-sm text-slate-400 leading-relaxed mb-6">{charity.description}</p>
+              <p className="text-sm text-slate-400 leading-relaxed mb-4 sm:mb-6">{charity.description}</p>
             </div>
             
             <div className="flex gap-2">

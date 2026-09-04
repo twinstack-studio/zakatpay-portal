@@ -181,21 +181,21 @@ function AuthModalContent({ isOpen, onClose, setUser }) {
   };
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[200] flex items-start sm:items-center justify-center p-3 sm:p-4 overflow-y-auto">
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={handleClose}></div>
       
-      <div className="relative w-full max-w-md bg-[#0a0a0c] border border-white/10 rounded-3xl p-8 z-10 shadow-[0_0_50px_rgba(236,72,153,0.15)] animate-fade-in-up">
+      <div className="relative w-full max-w-md my-auto bg-[#0a0a0c] border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-8 z-10 shadow-[0_0_50px_rgba(236,72,153,0.15)] animate-fade-in-up">
         <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-pink-500 to-purple-600"></div>
-        <button onClick={handleClose} className="absolute top-6 right-6 text-slate-500 hover:text-white transition-colors"><X size={24} /></button>
+        <button onClick={handleClose} className="absolute top-4 right-4 sm:top-6 sm:right-6 text-slate-500 hover:text-white transition-colors p-1"><X size={24} /></button>
 
-        <div className="mb-8">
-          <h2 className="text-3xl font-black text-white mb-2">
+        <div className="mb-5 sm:mb-6 md:mb-8">
+          <h2 className="text-2xl sm:text-3xl font-black text-white mb-2">
             {step === 'email' && "Let's Get Started"}
             {step === 'otp' && "Verify Email"}
             {step === 'register' && "Create Account"}
             {step === 'login' && (justRegistered ? "Welcome to ZakatPay!" : "Welcome Back")}
           </h2>
-          <p className="text-slate-400 text-sm">
+          <p className="text-slate-400 text-xs sm:text-sm">
             {step === 'email' && "Enter your email to receive a one-time password (OTP)."}
             {step === 'otp' && `We've sent a secure OTP to ${email}`}
             {step === 'register' && "Your email is verified. Please set up your profile."}
@@ -204,7 +204,7 @@ function AuthModalContent({ isOpen, onClose, setUser }) {
         </div>
 
         {error && (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-xs p-3 rounded-lg mb-6 flex items-center gap-2">
+          <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-xs p-3 rounded-lg mb-4 sm:mb-6 flex items-center gap-2">
             <ShieldCheck size={16} className="flex-shrink-0" /> <span className="leading-snug">{error}</span>
           </div>
         )}
@@ -219,7 +219,7 @@ function AuthModalContent({ isOpen, onClose, setUser }) {
                   <input type="email" required placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full bg-[#13141a] border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white outline-none focus:border-pink-500 transition-colors" />
                 </div>
               </div>
-              <button type="submit" disabled={isLoading} className="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg flex justify-center items-center gap-2">
+              <button type="submit" disabled={isLoading} className="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-bold py-3 sm:py-3.5 rounded-xl transition-all shadow-lg flex justify-center items-center gap-2">
                 {isLoading ? <Loader2 className="animate-spin" size={18} /> : <>Send OTP <ArrowRight size={16} /></>}
               </button>
             </form>
@@ -235,7 +235,7 @@ function AuthModalContent({ isOpen, onClose, setUser }) {
               type="button" 
               onClick={() => googleLogin()} 
               disabled={isLoading}
-              className="w-full bg-[#13141a] border border-white/10 hover:border-white/30 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg flex justify-center items-center gap-3"
+              className="w-full bg-[#13141a] border border-white/10 hover:border-white/30 text-white font-bold py-3 sm:py-3.5 rounded-xl transition-all shadow-lg flex justify-center items-center gap-3"
             >
               <GoogleIcon /> Continue with Google
             </button>
@@ -257,7 +257,7 @@ function AuthModalContent({ isOpen, onClose, setUser }) {
                 <input type="text" required placeholder="Enter Code" value={otp} onChange={(e) => setOtp(e.target.value)} className="w-full bg-[#13141a] border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white font-mono tracking-widest text-lg outline-none focus:border-purple-500 transition-colors text-center" />
               </div>
             </div>
-            <button type="submit" disabled={isLoading} className="w-full bg-white text-purple-700 hover:text-pink-600 font-bold py-3.5 rounded-xl transition-all shadow-lg flex justify-center items-center gap-2">
+            <button type="submit" disabled={isLoading} className="w-full bg-white text-purple-700 hover:text-pink-600 font-bold py-3 sm:py-3.5 rounded-xl transition-all shadow-lg flex justify-center items-center gap-2">
               {isLoading ? <Loader2 className="animate-spin text-purple-700" size={18} /> : <>Verify OTP <CheckCircle2 size={16} /></>}
             </button>
             <div className="flex justify-between items-center mt-4">
@@ -302,7 +302,7 @@ function AuthModalContent({ isOpen, onClose, setUser }) {
                 <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-4 top-3.5 text-slate-500 hover:text-white">{showConfirmPassword ? <EyeOff size={18}/> : <Eye size={18}/>}</button>
               </div>
             </div>
-            <button type="submit" disabled={isLoading} className="w-full mt-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg flex justify-center items-center gap-2">{isLoading ? <Loader2 className="animate-spin" size={18} /> : <>Register Account</>}</button>
+            <button type="submit" disabled={isLoading} className="w-full mt-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-bold py-3 sm:py-3.5 rounded-xl transition-all shadow-lg flex justify-center items-center gap-2">{isLoading ? <Loader2 className="animate-spin" size={18} /> : <>Register Account</>}</button>
           </form>
         )}
 
@@ -321,7 +321,7 @@ function AuthModalContent({ isOpen, onClose, setUser }) {
                   <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-3.5 text-slate-500 hover:text-white">{showPassword ? <EyeOff size={18}/> : <Eye size={18}/>}</button>
                 </div>
               </div>
-              <button type="submit" disabled={isLoading} className="w-full mt-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg flex justify-center items-center gap-2">{isLoading ? <Loader2 className="animate-spin" size={18} /> : <>Login Securely <ArrowRight size={16} /></>}</button>
+              <button type="submit" disabled={isLoading} className="w-full mt-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-bold py-3 sm:py-3.5 rounded-xl transition-all shadow-lg flex justify-center items-center gap-2">{isLoading ? <Loader2 className="animate-spin" size={18} /> : <>Login Securely <ArrowRight size={16} /></>}</button>
             </form>
 
             {!justRegistered && (
@@ -337,7 +337,7 @@ function AuthModalContent({ isOpen, onClose, setUser }) {
                   type="button" 
                   onClick={() => googleLogin()} 
                   disabled={isLoading}
-                  className="w-full bg-[#13141a] border border-white/10 hover:border-white/30 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg flex justify-center items-center gap-3"
+                  className="w-full bg-[#13141a] border border-white/10 hover:border-white/30 text-white font-bold py-3 sm:py-3.5 rounded-xl transition-all shadow-lg flex justify-center items-center gap-3"
                 >
                   <GoogleIcon /> Continue with Google
                 </button>

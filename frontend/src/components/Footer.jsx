@@ -6,8 +6,8 @@ export default function Footer() {
   return (
     <footer className="border-t border-white/10 bg-black pt-10 pb-6">
       <div className="max-w-7xl mx-auto px-4">
-        {/* Gap aur margins ko chota kiya gaya hai (gap-8, mb-8) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        {/* Gap aur margins ko chota kiya gaya hai (gap-5 sm:gap-8, mb-5 sm:mb-8) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8 mb-5 sm:mb-8">
           
           <div>
             <div className="flex items-center gap-2 mb-4">

@@ -57,17 +57,17 @@ export default function ZakatCalculator() {
 
   return (
     <div className="max-w-5xl mx-auto framer-animate">
-      <div className="text-center mb-12">
-        <h2 className="text-4xl font-black text-white mb-4 tracking-tight">Smart Zakat Calculator</h2>
+      <div className="text-center mb-8 sm:mb-10 md:mb-12">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-4 tracking-tight">Smart Zakat Calculator</h2>
         <p className="text-slate-400">Enter your assets and liabilities accurately. We'll handle the rest based on Shariah principles.</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-8">
         <div className="lg:col-span-2 space-y-6">
           
           {/* ASSETS SECTION (Barkaraar) */}
           <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 relative overflow-hidden group hover:border-pink-500/30 transition-colors">
-            <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2"><Coins className="text-pink-500" size={24} /> Your Assets</h3>
+            <h3 className="text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center gap-2"><Coins className="text-pink-500" size={24} /> Your Assets</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {Object.keys(assets).map((key) => {
                 const isMetal = key === 'gold' || key === 'silver';
@@ -105,7 +105,7 @@ export default function ZakatCalculator() {
 
           {/* LIABILITIES SECTION (Barkaraar) */}
           <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 relative overflow-hidden group hover:border-purple-500/30 transition-colors">
-            <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2"><Landmark className="text-purple-500" size={24} /> Your Liabilities</h3>
+            <h3 className="text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center gap-2"><Landmark className="text-purple-500" size={24} /> Your Liabilities</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {Object.keys(liabilities).map((key) => (
                 <div key={key}>
@@ -125,9 +125,9 @@ export default function ZakatCalculator() {
           <div className="bg-gradient-to-br from-[#0a0a0c] to-black border border-white/10 rounded-2xl p-6 md:p-8 relative shadow-2xl">
             {totalZakat > 0 && <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-500 to-purple-600"></div>}
             
-            <h3 className="text-xl font-bold text-white mb-8 border-b border-white/10 pb-4">Calculation Summary</h3>
+            <h3 className="text-xl font-bold text-white mb-5 sm:mb-8 border-b border-white/10 pb-4">Calculation Summary</h3>
             
-            <div className="space-y-4 mb-8">
+            <div className="space-y-4 mb-5 sm:mb-8">
               <div className="flex justify-between items-center">
                 <span className="text-slate-400 text-sm">Total Assets</span>
                 {/* 3. SHOW TOTAL CONVERTED AMOUNT IN RUPEES IN SUMMARY (Barkaraar) */}
@@ -144,9 +144,9 @@ export default function ZakatCalculator() {
               <div className="flex justify-between items-center pt-4 border-t border-white/5"><span className="text-slate-300 font-bold">Net Worth</span><span className="text-white font-bold font-mono">Rs. {totalNetWorth.toLocaleString()}</span></div>
             </div>
 
-            <div className="bg-black/50 p-6 rounded-xl border border-white/5 text-center mb-6">
+            <div className="bg-black/50 p-6 rounded-xl border border-white/5 text-center mb-4 sm:mb-6">
               <p className="text-xs font-bold text-purple-400 uppercase tracking-widest mb-2">Total Zakat Payable</p>
-              <h2 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400 font-mono tracking-tighter">Rs. {totalZakat.toLocaleString(undefined, { maximumFractionDigits: 0 })}</h2>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400 font-mono tracking-tighter">Rs. {totalZakat.toLocaleString(undefined, { maximumFractionDigits: 0 })}</h2>
             </div>
 
             {totalZakat > 0 && (

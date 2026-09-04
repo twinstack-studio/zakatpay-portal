@@ -57,11 +57,11 @@ export default function Videos() {
     <div className="w-full pb-24 framer-animate relative">
       <div className="bg-white/5 border-b border-white/10 py-16 text-center">
         <PlaySquare className="text-red-500 mx-auto mb-4" size={40} />
-        <h1 className="text-4xl md:text-5xl font-black text-white mb-4">Zakat <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-500">Video Gallery</span></h1>
-        <p className="text-slate-400 text-lg max-w-2xl mx-auto px-4">Watch authentic Zakat calculation tutorials and detailed talks by renowned Islamic scholars.</p>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4">Zakat <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-500">Video Gallery</span></h1>
+        <p className="text-slate-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-4">Watch authentic Zakat calculation tutorials and detailed talks by renowned Islamic scholars.</p>
       </div>
 
-      <div className="max-w-[1200px] mx-auto px-6 mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 mt-10 sm:mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
         {videos.map((video) => (
           <div 
             key={video.id} 

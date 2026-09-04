@@ -14,50 +14,50 @@ export default function PartnerNGO() {
   return (
     <div className="w-full pb-24 framer-animate">
       {/* HERO SECTION */}
-      <div className="bg-white/5 border-b border-white/10 py-20 text-center relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[120px] pointer-events-none"></div>
-        <div className="relative z-10 max-w-3xl mx-auto px-6">
-          <div className="w-20 h-20 mx-auto bg-purple-500/20 text-purple-400 rounded-full flex items-center justify-center mb-6 border border-purple-500/30">
+      <div className="bg-white/5 border-b border-white/10 py-12 sm:py-16 md:py-20 text-center relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[min(600px,120vw)] h-[min(600px,120vw)] bg-purple-600/10 rounded-full blur-[70px] sm:blur-[120px] pointer-events-none"></div>
+        <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6">
+          <div className="w-20 h-20 mx-auto bg-purple-500/20 text-purple-400 rounded-full flex items-center justify-center mb-4 sm:mb-6 border border-purple-500/30">
             <HeartHandshake size={40} />
           </div>
-          <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-4 sm:mb-6">
             Partner With <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-500">ZakatPay</span>
           </h1>
-          <p className="text-slate-400 text-lg leading-relaxed">
+          <p className="text-slate-400 text-sm sm:text-base md:text-lg leading-relaxed">
             Join Pakistan's most trusted digital charity network. Let us help you reach millions of global donors while maintaining 100% Shariah and FBR compliance.
           </p>
         </div>
       </div>
 
-      <div className="max-w-[1200px] mx-auto px-6 mt-20">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 mt-12 sm:mt-20">
         {/* BENEFITS SECTION */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-black text-white mb-4">Why Join Our Network?</h2>
+        <div className="text-center mb-8 sm:mb-10 md:mb-12">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-4">Why Join Our Network?</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
-          <div className="bg-[#0a0a0c] border border-white/10 p-8 rounded-3xl hover:border-purple-500/50 transition-colors text-center group">
-            <TrendingUp size={36} className="text-purple-400 mx-auto mb-6 group-hover:scale-110 transition-transform" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14 sm:mb-20 md:mb-24">
+          <div className="bg-[#0a0a0c] border border-white/10 p-5 sm:p-8 rounded-2xl sm:rounded-3xl hover:border-purple-500/50 transition-colors text-center group">
+            <TrendingUp size={36} className="text-purple-400 mx-auto mb-4 sm:mb-6 group-hover:scale-110 transition-transform" />
             <h3 className="text-xl font-bold text-white mb-3">Global Digital Reach</h3>
             <p className="text-slate-400 text-sm leading-relaxed">Expand your donor base beyond physical boundaries. Connect with overseas Pakistanis effortlessly.</p>
           </div>
-          <div className="bg-[#0a0a0c] border border-white/10 p-8 rounded-3xl hover:border-pink-500/50 transition-colors text-center group">
-            <ShieldCheck size={36} className="text-pink-400 mx-auto mb-6 group-hover:scale-110 transition-transform" />
+          <div className="bg-[#0a0a0c] border border-white/10 p-5 sm:p-8 rounded-2xl sm:rounded-3xl hover:border-pink-500/50 transition-colors text-center group">
+            <ShieldCheck size={36} className="text-pink-400 mx-auto mb-4 sm:mb-6 group-hover:scale-110 transition-transform" />
             <h3 className="text-xl font-bold text-white mb-3">Zero Commission</h3>
             <p className="text-slate-400 text-sm leading-relaxed">We believe in 100% donation delivery. ZakatPay charges zero commission on funds transferred to your NGO.</p>
           </div>
-          <div className="bg-[#0a0a0c] border border-white/10 p-8 rounded-3xl hover:border-blue-500/50 transition-colors text-center group">
-            <FileText size={36} className="text-blue-400 mx-auto mb-6 group-hover:scale-110 transition-transform" />
+          <div className="bg-[#0a0a0c] border border-white/10 p-5 sm:p-8 rounded-2xl sm:rounded-3xl hover:border-blue-500/50 transition-colors text-center group">
+            <FileText size={36} className="text-blue-400 mx-auto mb-4 sm:mb-6 group-hover:scale-110 transition-transform" />
             <h3 className="text-xl font-bold text-white mb-3">Automated Tax Receipts</h3>
             <p className="text-slate-400 text-sm leading-relaxed">We automatically generate FBR-compliant tax exemption certificates for your donors under Section 61.</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-8 md:gap-12 lg:gap-16 items-start">
           {/* ELIGIBILITY CRITERIA */}
           <div className="space-y-8">
             <div>
-              <h2 className="text-3xl font-black text-white mb-6">Eligibility Criteria</h2>
-              <p className="text-slate-400 mb-8">To ensure complete transparency and trust for our donors, we have strict vetting criteria for onboarding new charities.</p>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-4 sm:mb-6">Eligibility Criteria</h2>
+              <p className="text-slate-400 mb-5 sm:mb-8">To ensure complete transparency and trust for our donors, we have strict vetting criteria for onboarding new charities.</p>
             </div>
             
             <div className="space-y-4">
@@ -86,13 +86,13 @@ export default function PartnerNGO() {
           </div>
 
           {/* APPLICATION FORM */}
-          <div className="bg-gradient-to-br from-[#13141a] to-black border border-white/10 rounded-[2.5rem] p-8 md:p-10 shadow-2xl relative overflow-hidden">
+          <div className="bg-gradient-to-br from-[#13141a] to-black border border-white/10 rounded-[2.5rem] p-5 sm:p-8 md:p-10 shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-purple-500 to-pink-500"></div>
             
             {!isSubmitted ? (
               <>
-                <h3 className="text-2xl font-black text-white mb-2">Apply for Partnership</h3>
-                <p className="text-slate-400 text-sm mb-8">Fill out the initial application. Our vetting team will contact you within 3-5 business days.</p>
+                <h3 className="text-lg sm:text-xl md:text-2xl font-black text-white mb-2">Apply for Partnership</h3>
+                <p className="text-slate-400 text-sm mb-5 sm:mb-8">Fill out the initial application. Our vetting team will contact you within 3-5 business days.</p>
                 
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div>
@@ -140,11 +140,11 @@ export default function PartnerNGO() {
               </>
             ) : (
               <div className="py-12 text-center animate-fade-in-up">
-                <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
                   <CheckCircle2 size={40} className="text-green-500" />
                 </div>
-                <h3 className="text-2xl font-black text-white mb-2">Application Received!</h3>
-                <p className="text-slate-400 text-sm leading-relaxed mb-8">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-black text-white mb-2">Application Received!</h3>
+                <p className="text-slate-400 text-sm leading-relaxed mb-5 sm:mb-8">
                   JazakAllah for your interest in partnering with ZakatPay. Our onboarding team will review your details and contact you via email shortly.
                 </p>
                 <button onClick={() => setIsSubmitted(false)} className="text-purple-400 hover:text-white text-sm font-bold transition-colors">

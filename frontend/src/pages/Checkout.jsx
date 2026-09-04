@@ -102,7 +102,7 @@ export default function Checkout() {
             <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-1"><CreditCard size={12}/> Card Number</label>
             <input type="text" name="cardNumber" required value={paymentData.cardNumber} onChange={handleInputChange} maxLength="19" placeholder="0000 0000 0000 0000" className={`w-full bg-[#13141a] border border-white/10 rounded-xl py-3.5 px-4 text-white font-mono text-sm outline-none transition-colors ${focusClass}`} />
           </div>
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-1"><Calendar size={12}/> Expiry Date</label>
               <input type="text" name="expiry" required value={paymentData.expiry} onChange={handleInputChange} maxLength="5" placeholder="MM/YY" className={`w-full bg-[#13141a] border border-white/10 rounded-xl py-3.5 px-4 text-white font-mono text-sm outline-none transition-colors ${focusClass}`} />
@@ -151,23 +151,23 @@ export default function Checkout() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] py-12 md:py-24 px-6 flex justify-center framer-animate">
+    <div className="min-h-screen bg-[#050505] py-10 sm:py-12 md:py-24 px-4 sm:px-6 flex justify-center framer-animate">
       <div className="w-full max-w-4xl">
         
         {!isSuccess ? (
           <form onSubmit={handlePayment}>
             {/* 1. CHECKOUT HEADER & AMOUNT */}
-            <div className="text-center mb-10">
-              <Link to={`/donate/${id}`} className="inline-flex items-center gap-2 text-slate-400 hover:text-white font-bold text-sm mb-6 transition-colors">
+            <div className="text-center mb-6 sm:mb-8 md:mb-10">
+              <Link to={`/donate/${id}`} className="inline-flex items-center gap-2 text-slate-400 hover:text-white font-bold text-sm mb-4 sm:mb-6 transition-colors">
                 <ArrowLeft size={16} /> Edit Details
               </Link>
-              <h2 className="text-3xl md:text-5xl font-black text-white mb-4">Secure Checkout</h2>
-              <p className="text-slate-400 mb-6">Complete your donation to <span className={`font-bold ${ngo.textClass}`}>{ngo.name}</span></p>
+              <h2 className="text-2xl sm:text-3xl md:text-5xl font-black text-white mb-4">Secure Checkout</h2>
+              <p className="text-slate-400 mb-4 sm:mb-6">Complete your donation to <span className={`font-bold ${ngo.textClass}`}>{ngo.name}</span></p>
               
               <div className={`inline-block bg-gradient-to-r ${ngo.color} p-1 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.5)]`}>
-                <div className="bg-[#0a0a0c] rounded-[1.35rem] px-8 py-6 flex flex-col items-center">
+                <div className="bg-[#0a0a0c] rounded-[1.35rem] px-4 sm:px-8 py-5 sm:py-6 flex flex-col items-center">
                   <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Total Donation Amount</p>
-                  <h1 className="text-5xl md:text-6xl font-black text-white font-mono tracking-tighter">
+                  <h1 className="text-3xl sm:text-4xl md:text-6xl font-black text-white font-mono tracking-tighter break-all text-center">
                     <span className={ngo.textClass}>Rs. </span>{parseInt(donationAmount).toLocaleString()}
                   </h1>
                 </div>
@@ -175,18 +175,18 @@ export default function Checkout() {
             </div>
 
             {/* 2. PAYMENT METHODS & DYNAMIC FORM */}
-            <div className="bg-[#0a0a0c] border border-white/10 p-8 rounded-[2rem] shadow-2xl mb-8">
-              <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+            <div className="bg-[#0a0a0c] border border-white/10 p-8 rounded-[2rem] shadow-2xl mb-5 sm:mb-8">
+              <h3 className="text-xl font-bold text-white mb-4 sm:mb-6 flex items-center gap-2">
                 <Lock size={20} className={ngo.textClass} /> Select Payment Gateway
               </h3>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-5 sm:mb-8">
                 {gateways.map((gateway) => (
                   <button 
                     type="button"
                     key={gateway.id}
                     onClick={() => setSelectedMethod(gateway.id)}
-                    className={`relative p-5 rounded-2xl border transition-all flex flex-col items-center justify-center gap-4 min-h-[120px] ${selectedMethod === gateway.id ? `bg-white/10 ${ngo.borderClass} shadow-lg` : 'bg-[#13141a] border-white/5 hover:border-white/20 text-slate-400 grayscale hover:grayscale-0'}`}
+                    className={`relative p-5 rounded-2xl border transition-all flex flex-col items-center justify-center gap-3 sm:gap-4 min-h-[100px] sm:min-h-[120px] ${selectedMethod === gateway.id ? `bg-white/10 ${ngo.borderClass} shadow-lg` : 'bg-[#13141a] border-white/5 hover:border-white/20 text-slate-400 grayscale hover:grayscale-0'}`}
                   >
                     {selectedMethod === gateway.id && (
                       <div className={`absolute top-3 right-3 ${ngo.textClass}`}>
@@ -202,12 +202,12 @@ export default function Checkout() {
               </div>
 
               {/* === DYNAMIC PAYMENT FORM APPEARS HERE === */}
-              <div className="bg-[#13141a] border border-white/5 rounded-2xl p-6 mb-8">
+              <div className="bg-[#13141a] border border-white/5 rounded-2xl p-6 mb-5 sm:mb-8">
                 {renderPaymentForm()}
               </div>
 
               {/* 3. OFFICIAL BANK ACCOUNT BOX */}
-              <div className="bg-[#13141a] border border-white/5 rounded-2xl p-6 flex flex-col md:flex-row justify-between items-center gap-4">
+              <div className="bg-[#13141a] border border-white/5 rounded-2xl p-5 sm:p-6 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div className="flex items-center gap-4">
                   <div className={`w-12 h-12 rounded-full ${ngo.bgClass} flex items-center justify-center flex-shrink-0`}>
                     <Landmark size={24} className={ngo.textClass} />
@@ -249,16 +249,16 @@ export default function Checkout() {
           /* SUCCESS MESSAGE SCREEN */
           /* ========================================== */
           <div className="bg-[#0a0a0c] border border-white/10 p-12 rounded-[3rem] shadow-2xl text-center animate-fade-in-up">
-            <div className={`w-28 h-28 mx-auto rounded-full ${ngo.bgClass} flex items-center justify-center mb-8 shadow-2xl relative`}>
+            <div className={`w-28 h-28 mx-auto rounded-full ${ngo.bgClass} flex items-center justify-center mb-5 sm:mb-8 shadow-2xl relative`}>
               <div className="absolute inset-0 rounded-full animate-ping opacity-20 bg-current"></div>
               <CheckCircle2 size={60} className={ngo.textClass} />
             </div>
-            <h3 className="text-4xl md:text-5xl font-black text-white mb-4">JazakAllah!</h3>
-            <p className="text-slate-400 text-lg mb-8 max-w-lg mx-auto leading-relaxed">
+            <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4">JazakAllah!</h3>
+            <p className="text-slate-400 text-sm sm:text-base md:text-lg mb-5 sm:mb-8 max-w-lg mx-auto leading-relaxed">
               Your generous donation of <span className={`font-bold ${ngo.textClass}`}>Rs. {parseInt(donationAmount).toLocaleString()}</span> has been successfully transferred to <span className="text-white">{ngo.name}</span>.
             </p>
             
-            <div className="bg-[#13141a] border border-white/5 rounded-2xl p-6 max-w-md mx-auto mb-10 text-left">
+            <div className="bg-[#13141a] border border-white/5 rounded-2xl p-6 max-w-md mx-auto mb-6 sm:mb-8 md:mb-10 text-left">
               <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mb-4 border-b border-white/5 pb-2">Receipt Details</p>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between"><span className="text-slate-400">Donor Name:</span><span className="text-white font-bold">{donorDetails.name || 'Anonymous'}</span></div>

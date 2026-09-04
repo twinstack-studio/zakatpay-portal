@@ -140,11 +140,11 @@ export default function Blogs() {
     <div className="w-full pb-24 framer-animate">
       <div className="bg-white/5 border-b border-white/10 py-16 text-center">
         <BookOpen className="text-pink-500 mx-auto mb-4" size={40} />
-        <h1 className="text-4xl md:text-5xl font-black text-white mb-4">Islamic <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-500">Blogs & Articles</span></h1>
-        <p className="text-slate-400 text-lg max-w-2xl mx-auto px-4">Deepen your knowledge about Islamic finance, Zakat rulings, and the impact of your charity.</p>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4">Islamic <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-500">Blogs & Articles</span></h1>
+        <p className="text-slate-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-4">Deepen your knowledge about Islamic finance, Zakat rulings, and the impact of your charity.</p>
       </div>
 
-      <div className="max-w-[1200px] mx-auto px-6 mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 mt-10 sm:mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
         {blogsData.map((blog) => (
           <div key={blog.id} className="bg-[#0a0a0c] border border-white/10 rounded-3xl overflow-hidden hover:border-pink-500/50 transition-colors group flex flex-col">
             <div className="h-48 overflow-hidden relative flex-shrink-0 bg-white/5">
@@ -159,7 +159,7 @@ export default function Blogs() {
                 <span className="flex items-center gap-1"><User size={12}/> {blog.author}</span>
               </div>
               <h3 className="text-xl font-bold text-white mb-3 group-hover:text-pink-400 transition-colors">{blog.title}</h3>
-              <p className="text-slate-400 text-sm leading-relaxed mb-6 line-clamp-3">{blog.excerpt}</p>
+              <p className="text-slate-400 text-sm leading-relaxed mb-4 sm:mb-6 line-clamp-3">{blog.excerpt}</p>
               
               <Link to={`/blog/${blog.id}`} className="mt-auto text-pink-400 font-bold text-xs uppercase tracking-widest flex items-center gap-2 hover:text-pink-300 transition-colors w-fit">
                 Read Article <ArrowRight size={14} />

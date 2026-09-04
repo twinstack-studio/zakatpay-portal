@@ -54,7 +54,7 @@ export default function Chatbot() {
     <>
       <motion.button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 z-[999999] w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 text-white flex items-center justify-center shadow-lg transition-transform ${isOpen ? 'hidden' : 'flex'}`}
+        className={`fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[999999] w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 text-white items-center justify-center shadow-[0_10px_20px_rgba(236,72,153,0.5)] transition-transform ${isOpen ? 'hidden' : 'flex'}`}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
       >
@@ -64,27 +64,28 @@ export default function Chatbot() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.2 }}
-            // Mobile par full screen (inset-0) aur laptop par bottom-right
-            className="fixed inset-0 z-[999999] w-full h-[100dvh] md:inset-auto md:bottom-24 md:right-8 md:w-[380px] md:h-[500px] md:max-h-[80vh] md:rounded-2xl bg-[#0a0a0c] border-0 md:border border-white/10 shadow-2xl flex flex-col overflow-hidden"
+            initial={{ opacity: 0, scale: 0.9, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 12 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+            // Floating card on every screen - sits just above the FAB, never full screen.
+            // Width tracks the viewport on small phones but is capped at 380px.
+            className="fixed z-[999999] bottom-24 right-4 sm:right-6 md:bottom-28 md:right-10 w-[calc(100vw-2rem)] max-w-[380px] h-[70dvh] max-h-[520px] rounded-2xl bg-[#0a0a0c] border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.7)] flex flex-col overflow-hidden origin-bottom-right"
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-pink-600 to-purple-600 p-4 flex items-center justify-between shrink-0">
-              <div className="flex items-center gap-3">
-                <Bot size={22} className="text-white" />
-                <h3 className="text-white font-bold text-sm">ZakatPay Assistant</h3>
+            <div className="bg-gradient-to-r from-pink-600 to-purple-600 px-3 sm:px-4 py-3 flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                <Bot size={20} className="text-white shrink-0" />
+                <h3 className="text-white font-bold text-xs sm:text-sm truncate">ZakatPay Assistant</h3>
               </div>
-              <button onClick={() => setIsOpen(false)} className="text-white">
+              <button onClick={() => setIsOpen(false)} aria-label="Close chat" className="text-white shrink-0 p-1 bg-transparent shadow-none">
                 <X size={18} />
               </button>
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 p-4 overflow-y-auto space-y-4">
-              <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl p-3 flex items-start gap-3 mb-6">
+            <div className="flex-1 p-3 sm:p-4 overflow-y-auto overscroll-contain space-y-3 sm:space-y-4">
+              <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl p-3 flex items-start gap-3 mb-4 sm:mb-6">
                 <Info size={16} className="text-purple-400 shrink-0 mt-0.5" />
                 <p className="text-xs text-slate-400 leading-relaxed">This is an automated assistant. For complex Shariah rulings, please consult your local religious scholar.</p>
               </div>
@@ -109,7 +110,7 @@ export default function Chatbot() {
             </div>
 
             {/* Input & Quick Replies Area */}
-            <div className="p-4 border-t border-white/10 bg-[#0a0a0c] pb-[calc(1rem+env(safe-area-inset-bottom))]">
+            <div className="p-3 sm:p-4 border-t border-white/10 bg-[#0a0a0c] shrink-0">
               
               {/* Quick Replies Restored Here */}
               <div className="flex overflow-x-auto scrollbar-hide gap-2 mb-3 pb-1">

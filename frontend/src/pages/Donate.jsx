@@ -45,14 +45,14 @@ export default function Donate() {
         <div className={`md:w-5/12 bg-gradient-to-br ${ngo.color} p-10 md:p-12 text-white relative flex flex-col justify-between overflow-hidden`}>
           <HeartHandshake size={300} className="absolute -bottom-20 -left-20 opacity-10 rotate-12" />
           <div className="relative z-10">
-            <Link to="/foundations" className="inline-flex items-center gap-2 text-white/80 hover:text-white font-bold text-sm mb-12 transition-colors">
+            <Link to="/foundations" className="inline-flex items-center gap-2 text-white/80 hover:text-white font-bold text-sm mb-8 sm:mb-10 md:mb-12 transition-colors">
               <ArrowLeft size={16} /> Back
             </Link>
-            <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center shadow-xl mb-6 overflow-hidden p-1">
+            <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center shadow-xl mb-4 sm:mb-6 overflow-hidden p-1">
               <img src={ngo.image} alt={ngo.name} className="w-full h-full object-cover rounded-xl" />
             </div>
             <p className="text-[10px] font-black uppercase tracking-widest text-white/70 mb-2">You are donating to</p>
-            <h2 className="text-4xl font-black mb-4 leading-tight">{ngo.name}</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-4 leading-tight">{ngo.name}</h2>
             <p className="text-white/80 text-sm leading-relaxed border-l-4 border-white/30 pl-4 italic">
               {ngo.shortDesc}
             </p>
@@ -65,8 +65,8 @@ export default function Donate() {
 
         {/* RIGHT SIDE (FORM) */}
         <div className="md:w-7/12 p-10 md:p-12 relative bg-[#0a0a0c]">
-          <div className="mb-8 border-b border-white/10 pb-6">
-            <h3 className="text-3xl font-black text-white mb-2">Donor Details</h3>
+          <div className="mb-5 sm:mb-8 border-b border-white/10 pb-6">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-2">Donor Details</h3>
             <p className="text-slate-400 text-sm">Please provide your details for the donation receipt.</p>
           </div>
 
@@ -93,7 +93,7 @@ export default function Donate() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5 sm:mb-8">
               <div>
                 <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-1"><Globe size={12}/> Country</label>
                 <div className="relative">

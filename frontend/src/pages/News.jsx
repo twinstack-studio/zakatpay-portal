@@ -30,13 +30,13 @@ export default function News() {
     <div className="w-full pb-24 framer-animate">
       <div className="bg-white/5 border-b border-white/10 py-16 text-center">
         <Newspaper className="text-purple-500 mx-auto mb-4" size={40} />
-        <h1 className="text-4xl md:text-5xl font-black text-white mb-4">News & <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">Announcements</span></h1>
-        <p className="text-slate-400 text-lg max-w-2xl mx-auto px-4">Stay updated with platform milestones, new NGO partnerships, and regulatory updates.</p>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-4">News & <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">Announcements</span></h1>
+        <p className="text-slate-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-4">Stay updated with platform milestones, new NGO partnerships, and regulatory updates.</p>
       </div>
 
-      <div className="max-w-[900px] mx-auto px-6 mt-16 space-y-6">
+      <div className="max-w-[900px] mx-auto px-4 sm:px-6 mt-10 sm:mt-16 space-y-6">
         {newsItems.map((news) => (
-          <div key={news.id} className="bg-[#0a0a0c] border border-white/10 p-8 rounded-3xl hover:bg-white/5 transition-colors relative overflow-hidden group">
+          <div key={news.id} className="bg-[#0a0a0c] border border-white/10 p-5 sm:p-8 rounded-2xl sm:rounded-3xl hover:bg-white/5 transition-colors relative overflow-hidden group">
             <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-purple-500 to-blue-500 opacity-50 group-hover:opacity-100 transition-opacity"></div>
             
             <div className="flex flex-col md:flex-row md:items-center gap-4 md:justify-between mb-4">

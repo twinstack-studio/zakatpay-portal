@@ -28,16 +28,16 @@ export default function AdminDashboard() {
       {/* ========================================== */}
       {/* 1. SIDEBAR */}
       {/* ========================================== */}
-      <aside className="w-full md:w-64 bg-[#0a0a0c] border-r border-white/10 flex flex-col flex-shrink-0">
-        <div className="p-6 border-b border-white/10">
+      <aside className="w-full md:w-64 bg-[#0a0a0c] border-b md:border-b-0 md:border-r border-white/10 flex flex-col flex-shrink-0 md:h-screen md:sticky md:top-0">
+        <div className="p-4 sm:p-6 border-b border-white/10">
           <Link to="/" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center font-black text-white text-lg shadow-lg">Z</div>
             <span className="font-black text-white text-xl tracking-tight">Admin<span className="text-pink-400 font-light">Panel</span></span>
           </Link>
         </div>
         
-        <nav className="p-4 space-y-2 flex-grow">
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 ml-2">Main Menu</p>
+        <nav className="p-3 sm:p-4 flex md:flex-col gap-2 md:gap-0 md:space-y-2 flex-grow overflow-x-auto md:overflow-x-visible">
+          <p className="hidden md:block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 ml-2">Main Menu</p>
           {[
             { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
             { id: 'users', label: 'Manage Users', icon: Users },
@@ -48,14 +48,14 @@ export default function AdminDashboard() {
             <button 
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${activeTab === item.id ? 'bg-gradient-to-r from-pink-600 to-purple-600 text-white shadow-lg' : 'text-slate-400 hover:bg-white/5 hover:text-white'}`}
+              className={`w-auto md:w-full shrink-0 md:shrink flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2.5 md:py-3 rounded-xl text-xs md:text-sm font-bold whitespace-nowrap transition-all ${activeTab === item.id ? 'bg-gradient-to-r from-pink-600 to-purple-600 text-white shadow-lg' : 'text-slate-400 hover:bg-white/5 hover:text-white'}`}
             >
               <item.icon size={18} /> {item.label}
             </button>
           ))}
         </nav>
 
-        <div className="p-4 border-t border-white/10">
+        <div className="hidden md:block p-4 border-t border-white/10">
           <Link to="/" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-all">
             <LogOut size={18} /> Back to Website
           </Link>
@@ -65,21 +65,21 @@ export default function AdminDashboard() {
       {/* ========================================== */}
       {/* 2. MAIN CONTENT AREA */}
       {/* ========================================== */}
-      <main className="flex-grow flex flex-col h-screen overflow-hidden">
+      <main className="flex-grow flex flex-col min-w-0 md:h-screen md:overflow-hidden">
         
         {/* Header */}
-        <header className="bg-[#0a0a0c] border-b border-white/10 h-20 px-8 flex items-center justify-between flex-shrink-0">
-          <div className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-full px-4 py-2 w-64 md:w-96 focus-within:border-pink-500 transition-colors">
+        <header className="bg-[#0a0a0c] border-b border-white/10 md:h-20 px-4 sm:px-6 md:px-8 py-3 md:py-0 flex items-center justify-between gap-3 flex-shrink-0">
+          <div className="flex items-center gap-2 sm:gap-4 bg-white/5 border border-white/10 rounded-full px-3 sm:px-4 py-2 flex-1 min-w-0 sm:flex-none sm:w-64 md:w-96 focus-within:border-pink-500 transition-colors">
             <Search size={16} className="text-slate-400" />
             <input type="text" placeholder="Search transactions, users..." className="bg-transparent border-none outline-none text-sm text-white w-full placeholder:text-slate-600" />
           </div>
           
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 sm:gap-6 shrink-0">
             <button className="relative text-slate-400 hover:text-white transition-colors">
               <Bell size={20} />
               <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-pink-500 rounded-full animate-pulse"></span>
             </button>
-            <div className="flex items-center gap-3 pl-6 border-l border-white/10">
+            <div className="flex items-center gap-3 sm:pl-6 sm:border-l border-white/10">
               <div className="text-right hidden md:block">
                 <p className="text-sm font-bold text-white">Super Admin</p>
                 <p className="text-[10px] text-slate-500 uppercase tracking-widest">System Control</p>
@@ -90,16 +90,16 @@ export default function AdminDashboard() {
         </header>
 
         {/* Dashboard Content (Scrollable) */}
-        <div className="flex-grow overflow-y-auto p-8">
-          <div className="mb-8">
-            <h1 className="text-3xl font-black text-white mb-2">Platform Overview</h1>
+        <div className="flex-grow md:overflow-y-auto p-4 sm:p-6 md:p-8">
+          <div className="mb-5 sm:mb-8">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-2">Platform Overview</h1>
             <p className="text-slate-400 text-sm">Welcome back! Here is what's happening on ZakatPay today.</p>
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8 md:mb-10">
             {stats.map((stat, index) => (
-              <div key={index} className="bg-[#0a0a0c] border border-white/10 p-6 rounded-3xl relative overflow-hidden group hover:border-white/20 transition-colors">
+              <div key={index} className="bg-[#0a0a0c] border border-white/10 p-5 sm:p-6 rounded-2xl sm:rounded-3xl relative overflow-hidden group hover:border-white/20 transition-colors">
                 <div className={`absolute top-0 right-0 w-32 h-32 ${stat.bg} rounded-full blur-3xl -mr-10 -mt-10 opacity-50 group-hover:opacity-100 transition-opacity`}></div>
                 <div className="flex justify-between items-start mb-4 relative z-10">
                   <div className={`w-12 h-12 ${stat.bg} ${stat.color} rounded-2xl flex items-center justify-center shadow-lg`}>
@@ -110,14 +110,14 @@ export default function AdminDashboard() {
                   </span>
                 </div>
                 <h3 className="text-slate-400 text-sm font-bold uppercase tracking-widest mb-1 relative z-10">{stat.title}</h3>
-                <p className="text-3xl font-black text-white relative z-10">{stat.value}</p>
+                <p className="text-xl sm:text-2xl md:text-3xl font-black text-white relative z-10">{stat.value}</p>
               </div>
             ))}
           </div>
 
           {/* Recent Transactions Table */}
           <div className="bg-[#0a0a0c] border border-white/10 rounded-3xl overflow-hidden">
-            <div className="p-6 border-b border-white/10 flex justify-between items-center">
+            <div className="p-4 sm:p-6 border-b border-white/10 flex flex-wrap gap-2 justify-between items-center">
               <h3 className="text-xl font-bold text-white">Live Transactions</h3>
               <button className="text-pink-400 hover:text-pink-300 text-xs font-bold uppercase tracking-widest flex items-center gap-1 transition-colors">
                 View All <ChevronRight size={14} />

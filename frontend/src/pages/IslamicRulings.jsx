@@ -59,31 +59,31 @@ export default function IslamicRulings() {
     <div className="w-full pb-24 framer-animate">
       
       {/* HERO SECTION */}
-      <div className="bg-white/5 border-b border-white/10 py-20 text-center relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-pink-600/10 rounded-full blur-[120px] pointer-events-none"></div>
-        <div className="relative z-10 max-w-4xl mx-auto px-6">
-          <div className="w-20 h-20 mx-auto bg-pink-500/20 text-pink-400 rounded-full flex items-center justify-center mb-6 border border-pink-500/30">
+      <div className="bg-white/5 border-b border-white/10 py-12 sm:py-16 md:py-20 text-center relative overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[min(600px,120vw)] h-[min(600px,120vw)] bg-pink-600/10 rounded-full blur-[70px] sm:blur-[120px] pointer-events-none"></div>
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="w-20 h-20 mx-auto bg-pink-500/20 text-pink-400 rounded-full flex items-center justify-center mb-4 sm:mb-6 border border-pink-500/30">
             <BookOpen size={40} />
           </div>
-          <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-4 sm:mb-6">
             Islamic <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-500">Rulings & Fatwas</span>
           </h1>
-          <p className="text-slate-400 text-lg leading-relaxed">
+          <p className="text-slate-400 text-sm sm:text-base md:text-lg leading-relaxed">
             Understand the Fiqh of Zakat and Sadaqah through the light of the Quran, Sunnah, and consensus of recognized Islamic scholars.
           </p>
         </div>
       </div>
 
-      <div className="max-w-[1200px] mx-auto px-6 mt-16 space-y-24">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 mt-10 sm:mt-16 space-y-14 sm:space-y-20 md:space-y-24">
         
         {/* QURAN & HADITH SECTION */}
         <section>
-          <div className="flex items-center gap-3 mb-8">
+          <div className="flex items-center gap-3 mb-5 sm:mb-8">
             <Bookmark className="text-pink-500" size={28} />
-            <h2 className="text-3xl font-black text-white">The Divine Command</h2>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white">The Divine Command</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gradient-to-br from-[#0a0a0c] to-black border border-white/10 p-8 rounded-3xl relative overflow-hidden">
+            <div className="bg-gradient-to-br from-[#0a0a0c] to-black border border-white/10 p-5 sm:p-8 rounded-2xl sm:rounded-3xl relative overflow-hidden">
               <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/10 rounded-full blur-3xl"></div>
               <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                 <BookOpen size={20} className="text-purple-400"/> From the Quran
@@ -97,7 +97,7 @@ export default function IslamicRulings() {
               <p className="text-slate-500 text-sm font-bold uppercase tracking-widest">— Surah Al-Baqarah (2:43)</p>
             </div>
             
-            <div className="bg-gradient-to-br from-[#0a0a0c] to-black border border-white/10 p-8 rounded-3xl relative overflow-hidden">
+            <div className="bg-gradient-to-br from-[#0a0a0c] to-black border border-white/10 p-5 sm:p-8 rounded-2xl sm:rounded-3xl relative overflow-hidden">
               <div className="absolute top-0 right-0 w-24 h-24 bg-pink-500/10 rounded-full blur-3xl"></div>
               <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                 <BookOpen size={20} className="text-pink-400"/> From the Sunnah
@@ -115,22 +115,22 @@ export default function IslamicRulings() {
         {/* SCHOLARS SECTION (UPDATED IMAGE ALIGNMENT) */}
         {/* ========================================== */}
         <section>
-          <div className="flex items-center gap-3 mb-10">
+          <div className="flex items-center gap-3 mb-6 sm:mb-8 md:mb-10">
             <Award className="text-purple-500" size={28} />
-            <h2 className="text-3xl font-black text-white">Expert Opinions & Fatwas</h2>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white">Expert Opinions & Fatwas</h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8 lg:gap-10">
             {scholars.map((scholar) => (
-              <div key={scholar.id} className="bg-[#0a0a0c] border border-white/10 p-8 md:p-10 rounded-3xl hover:border-pink-500/40 transition-all group flex flex-col items-center text-center shadow-lg">
+              <div key={scholar.id} className="bg-[#0a0a0c] border border-white/10 p-5 sm:p-8 md:p-10 rounded-3xl hover:border-pink-500/40 transition-all group flex flex-col items-center text-center shadow-lg">
                 
-                <div className="w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-white/10 group-hover:border-pink-500 transition-colors mb-6 shadow-2xl flex-shrink-0">
+                <div className="w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-white/10 group-hover:border-pink-500 transition-colors mb-4 sm:mb-6 shadow-2xl flex-shrink-0">
                   {/* Yahan object-top ko object-center kar diya gaya hai */}
                   <img src={scholar.image} alt={scholar.name} className="w-full h-full object-cover object-center" />
                 </div>
                 
-                <h3 className="text-2xl md:text-3xl font-black text-white mb-2">{scholar.name}</h3>
-                <p className="text-pink-400 text-xs md:text-sm font-bold uppercase tracking-widest leading-relaxed mb-8 px-4">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-2">{scholar.name}</h3>
+                <p className="text-pink-400 text-xs md:text-sm font-bold uppercase tracking-widest leading-relaxed mb-5 sm:mb-8 px-4">
                   {scholar.qualification}
                 </p>
                 
@@ -148,9 +148,9 @@ export default function IslamicRulings() {
 
         {/* COMMON RULINGS */}
         <section>
-          <div className="flex items-center gap-3 mb-8">
+          <div className="flex items-center gap-3 mb-5 sm:mb-8">
             <AlertCircle className="text-blue-500" size={28} />
-            <h2 className="text-3xl font-black text-white">Modern Zakat Scenarios</h2>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white">Modern Zakat Scenarios</h2>
           </div>
           <div className="space-y-4">
             {generalRulings.map((ruling, index) => (
