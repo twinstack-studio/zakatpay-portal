@@ -21,6 +21,25 @@ import transparentPic from '../assets/transparent-pic.jpg';
 // ==========================================
 // 12 FOUNDATIONS WITH HEAVY CONTENT & BRAND COLORS
 // ==========================================
+// These founder photos are framed very differently - some are tight head-and-
+// shoulders portraits, others are wide shots. A single object-position cuts the
+// top of the head off in a circular avatar, so each one gets its own focus
+// point, picked by eye against the rendered circle.
+const AVATAR_FOCUS = {
+  edhi: '50% 0%',
+  saylani: '50% 10%',
+  indus: '50% 50%',
+  shaukat: '50% 10%',
+  alkhidmat: '50% 10%',
+  chhipa: '50% 10%',
+  jdc: '50% 10%',
+  tcf: '50% 50%',
+  akhuwat: '50% 10%',
+  siut: '100% 50%',
+  lrbt: '50% 0%',
+  transparent: '50% 20%',
+};
+
 export const foundationsData = [
   { 
     id: 'edhi', name: 'Edhi Foundation', founder: 'Abdul Sattar Edhi', image: edhiPic, initials: 'AE', 
@@ -125,7 +144,6 @@ export const foundationsData = [
     id: 'siut', name: 'SIUT', founder: 'Dr. Adibul Hasan Rizvi', image: siutPic, initials: 'AR', 
     color: 'from-blue-500 to-indigo-600', textClass: 'text-blue-400', bgClass: 'bg-blue-500/20', borderClass: 'border-blue-500/30',
     category: 'HEALTHCARE', 
-    imgClass: 'object-right',
     shortDesc: 'Free, highly specialized medical care, dialysis, and kidney transplants.', 
     longDesc: 'The Sindh Institute of Urology and Transplantation (SIUT) is a living miracle in Pakistan’s healthcare sector. Founded by the legendary Dr. Adibul Hasan Rizvi, SIUT provides completely free, comprehensive medical care for kidney, liver, and related diseases.\n\nDialysis and organ transplantation are among the most expensive medical procedures globally, often bankrupting families. SIUT offers these treatments to thousands of patients daily without charging a single rupee. Dr. Rizvi’s core philosophy is simple yet profound: "We don\'t let anyone die just because they cannot afford to live."\n\nYour Zakat to SIUT literally buys time and life for patients who have nowhere else to go.',
     mission: 'To provide comprehensive and modern medical care, completely free of cost, preserving the dignity of the patient.',
@@ -178,7 +196,8 @@ export default function Foundations() {
                 <img 
                   src={ngo.image} 
                   alt={ngo.founder} 
-                  className={`w-full h-full object-cover heavy-img-hover ${ngo.imgClass || 'object-top'}`}
+                  className="w-full h-full object-cover heavy-img-hover"
+                  style={{ objectPosition: AVATAR_FOCUS[ngo.id] || '50% 10%' }}
                   onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
                 />
                 <div className={`absolute inset-0 bg-gradient-to-br ${ngo.color} hidden items-center justify-center text-white font-black text-3xl`}>

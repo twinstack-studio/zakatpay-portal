@@ -11,6 +11,7 @@ import ismailMenkPic from '../assets/ismail-menk.jpg';
 const scholars = [
   {
     id: 1,
+    imgFocus: '50% 10%',
     name: "Justice (Retd) Mufti Taqi Usmani",
     qualification: "Vice President, Darul Uloom Karachi | Former Judge, Federal Shariat Court",
     image: taqiUsmaniPic,
@@ -18,6 +19,7 @@ const scholars = [
   },
   {
     id: 2,
+    imgFocus: '50% 10%',
     name: "Maulana Tariq Jameel",
     qualification: "Renowned Islamic Scholar | Recipient of Pride of Performance",
     image: tariqJameelPic,
@@ -25,6 +27,7 @@ const scholars = [
   },
   {
     id: 3,
+    imgFocus: '50% 10%',
     name: "Dr. Israr Ahmed (Late)",
     qualification: "Islamic Philosopher | Founder of Tanzeem-e-Islami",
     image: israrAhmedPic,
@@ -32,6 +35,7 @@ const scholars = [
   },
   {
     id: 4,
+    imgFocus: '50% 50%',
     name: "Mufti Ismail Menk",
     qualification: "Grand Mufti of Zimbabwe | Global Islamic Lecturer",
     image: ismailMenkPic,
@@ -125,8 +129,14 @@ export default function IslamicRulings() {
               <div key={scholar.id} className="bg-[#0a0a0c] border border-white/10 p-5 sm:p-8 md:p-10 rounded-3xl hover:border-pink-500/40 transition-all group flex flex-col items-center text-center shadow-lg">
                 
                 <div className="w-48 h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-white/10 group-hover:border-pink-500 transition-colors mb-4 sm:mb-6 shadow-2xl flex-shrink-0">
-                  {/* Yahan object-top ko object-center kar diya gaya hai */}
-                  <img src={scholar.image} alt={scholar.name} className="w-full h-full object-cover object-center" />
+                  {/* object-position is per-photo: object-center cropped the top
+                      of the turban off on the taller portraits. */}
+                  <img
+                    src={scholar.image}
+                    alt={scholar.name}
+                    className="w-full h-full object-cover"
+                    style={{ objectPosition: scholar.imgFocus || '50% 10%' }}
+                  />
                 </div>
                 
                 <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white mb-2">{scholar.name}</h3>
