@@ -135,11 +135,11 @@ body {
   overflow-x: clip;
 }
 
-/* Media hamesha container ke andar rahe */
-img, video, canvas, svg {
-  max-width: 100%;
-  height: auto;
-}
+/* NOTE: do NOT re-declare `img { height: auto }` here.
+   Tailwind's preflight already sets it inside @layer base, where utilities
+   can override it. Declaring it again in this file - which is unlayered, and
+   so beats every @layer - silently overrode `h-full` on every image and left
+   landscape photos filling only the top half of their circular frames. */
 
 /* Touch devices: native cursor wapas, custom cursor wahan render hi nahi hota */
 @media (pointer: coarse) {
