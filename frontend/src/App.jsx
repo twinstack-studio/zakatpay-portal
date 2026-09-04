@@ -429,8 +429,7 @@ export default function App() {
           <div className="border-t border-white/10 pt-6 text-center text-slate-500 text-xs flex flex-col md:flex-row justify-between items-center gap-4">
             <p>Copyright © 2026 ZakatPay Digital Portal. All rights reserved.</p>
             <div className="flex gap-4 opacity-50 grayscale hover:grayscale-0 transition-all">
-              <span className="font-bold text-white tracking-widest">VISA</span>
-              <span className="font-bold text-white tracking-widest">MASTERCARD</span>
+             
             </div>
           </div>
         </div>
