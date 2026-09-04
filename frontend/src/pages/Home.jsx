@@ -10,7 +10,7 @@ export default function HomePage() {
     <div className="w-full framer-animate overflow-hidden">
       
       {/* ========================================== */}
-      {/* 1. NEW PREMIUM HERO SECTION WITH LARGE IMAGE */}
+      {/* 1. NEW PREMIUM HERO SECTION */}
       {/* ========================================== */}
       <section className="relative pt-16 pb-24 lg:pt-24 lg:pb-32 px-6 max-w-[1400px] mx-auto">
         {/* Background ambient glow */}
@@ -30,7 +30,7 @@ export default function HomePage() {
               Purify your wealth through Zakat and Sadaqah. A 100% secure, transparent, and Shariah-compliant platform to calculate and distribute your charitable obligations.
             </p>
             
-            {/* Buttons: Removed the two, kept Learn More & added Explore */}
+            {/* Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4 z-10 relative">
               <Link to="/about" className="heavy-btn bg-white/5 border border-white/20 text-white px-8 py-4 rounded-full font-bold flex items-center justify-center gap-2 group w-full sm:w-auto shadow-[0_0_20px_rgba(255,255,255,0.1)]">
                 Learn More <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -54,30 +54,25 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right Side: Large Beautiful Image & 3D Model */}
-          <div className="relative mt-10 lg:mt-0 animate-fade-in-up h-[500px] md:h-[600px] w-full rounded-[2.5rem] overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#050505]">
-            <div className="absolute inset-0 bg-gradient-to-tr from-pink-500/20 to-purple-600/20 rounded-[2.5rem] blur-[60px] animate-pulse"></div>
+          {/* Right Side: DABBA REMOVED - Sirf khulay floating coins aur badge */}
+          <div className="relative mt-10 lg:mt-0 h-[500px] md:h-[600px] w-full flex items-center justify-center">
             
-            {/* The 3D Hero */}
+            {/* The 3D Hero Coins */}
             <ThreeDHero />
 
-            {/* Floating UI Badge on Image */}
-            <div className="absolute bottom-8 left-8 bg-black/70 backdrop-blur-md border border-white/10 p-4 rounded-2xl flex items-center gap-4 shadow-2xl z-10 pointer-events-none">
-              <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center border border-green-500/30">
-                <ShieldCheck className="text-green-400" size={24} />
-              </div>
-              <div>
-                <p className="text-white font-bold text-sm">Shariah Compliant</p>
-                <p className="text-slate-400 text-xs">Verified by Scholars</p>
-              </div>
-            </div>
+            {/* Floating UI Badge */}
+          
+                
+              
+              
+            
           </div>
 
         </div>
       </section>
 
       {/* ========================================== */}
-      {/* 2. CORE FEATURES SECTION (Kept all old stuff) */}
+      {/* 2. CORE FEATURES SECTION */}
       {/* ========================================== */}
       <section className="bg-[#0a0a0c] border-y border-white/5 py-24 relative">
         <div className="max-w-[1400px] mx-auto px-6">
@@ -137,7 +132,6 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
-            {/* Connecting line for desktop */}
             <div className="hidden md:block absolute top-10 left-[15%] right-[15%] h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
 
             <div className="relative text-center z-10">

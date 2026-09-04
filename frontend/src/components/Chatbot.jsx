@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageSquare, X, Send, Bot, User, Loader2, Info } from 'lucide-react';
+import { MessageSquare, X, Send, Bot, Info, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Chatbot() {
@@ -10,42 +10,24 @@ export default function Chatbot() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
-  
-  // Auto-scroll to bottom
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-  
+
   useEffect(() => {
     scrollToBottom();
   }, [messages, isTyping, isOpen]);
 
-  // Handle outside click for mobile
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden'; // Prevent background scrolling on mobile
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => { document.body.style.overflow = 'unset'; }
-  }, [isOpen]);
-
-  const quickReplies = [
-    "What is Nisab?",
-    "Tax Benefits",
-    "Is it secure?",
-    "How to pay?"
-  ];
+  const quickReplies = ["What is Nisab?", "Tax Benefits", "Is it secure?", "How to pay?"];
 
   const handleSend = (text) => {
     if (!text.trim()) return;
     
-    // Add user message
     setMessages(prev => [...prev, { type: 'user', text }]);
     setInput('');
     setIsTyping(true);
 
-    // Simulate AI response based on keywords
     setTimeout(() => {
       let botResponse = "I'm still learning! Please contact our human support at info@zakatpay.pk for detailed assistance.";
       const lowerText = text.toLowerCase();
@@ -69,28 +51,25 @@ export default function Chatbot() {
 
   return (
     <>
-      {/* Floating Action Button */}
       <motion.button
         onClick={() => setIsOpen(true)}
-        className={`w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 text-white flex items-center justify-center shadow-[0_10px_25px_rgba(236,72,153,0.5)] hover:scale-110 transition-transform ${isOpen ? 'hidden' : 'flex'}`}
+        className={`fixed bottom-6 right-6 z-[99999] w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 text-white flex items-center justify-center shadow-[0_10px_25px_rgba(236,72,153,0.5)] transition-transform ${isOpen ? 'hidden' : 'flex'}`}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
       >
         <MessageSquare size={24} className="md:w-7 md:h-7" />
       </motion.button>
 
-      {/* Chat Window */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.9 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            // Mobile adjustments: full height or max-height based on screen, fixed to bottom
-            className="fixed inset-0 z-[100] md:inset-auto md:bottom-24 md:right-10 w-full md:w-[380px] h-[100dvh] md:h-[600px] bg-[#0a0a0c] md:rounded-3xl border-0 md:border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden"
+            // Main fix yahan hai: alignment bottom-right par fix kar di hai aur screen height ke mutabiq max-height de di hai
+            className="fixed z-[100000] bottom-0 right-0 w-full h-[100dvh] md:bottom-24 md:right-8 md:w-[380px] md:h-[500px] md:max-h-[80vh] md:rounded-2xl bg-[#0a0a0c] border-0 md:border border-white/10 shadow-2xl flex flex-col overflow-hidden"
           >
-            {/* Header */}
             <div className="bg-gradient-to-r from-pink-600 to-purple-600 p-4 flex items-center justify-between shadow-md shrink-0">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center border border-white/30">
@@ -111,10 +90,7 @@ export default function Chatbot() {
               </button>
             </div>
 
-            {/* Chat Area */}
             <div className="flex-1 p-4 overflow-y-auto scrollbar-hide space-y-4 bg-gradient-to-b from-[#0a0a0c] to-[#121214]">
-              
-              {/* Trust Badge */}
               <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl p-3 flex items-start gap-3 mb-6">
                 <Info size={16} className="text-purple-400 shrink-0 mt-0.5" />
                 <p className="text-xs text-slate-400 leading-relaxed">This is an automated assistant. For complex Shariah rulings, please consult your local religious scholar.</p>
@@ -143,9 +119,7 @@ export default function Chatbot() {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Quick Replies & Input Area - Added pb-safe for mobile keyboards */}
             <div className="p-4 bg-[#0a0a0c] border-t border-white/10 shrink-0 pb-[calc(1rem+env(safe-area-inset-bottom))]">
-              {/* Quick Replies */}
               <div className="flex overflow-x-auto scrollbar-hide gap-2 mb-3 pb-1">
                 {quickReplies.map((reply, i) => (
                   <button 
@@ -158,7 +132,6 @@ export default function Chatbot() {
                 ))}
               </div>
 
-              {/* Input Form */}
               <form 
                 onSubmit={(e) => { e.preventDefault(); handleSend(input); }}
                 className="flex items-center gap-2"

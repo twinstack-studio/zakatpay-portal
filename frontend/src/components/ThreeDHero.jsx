@@ -1,153 +1,80 @@
-import React, { useRef, useMemo } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Stars, Float, Sparkles, Environment, MeshTransmissionMaterial, ContactShadows, Instance, Instances } from '@react-three/drei';
-import * as THREE from 'three';
-
-// --- Realistic Gold Coin (Sikka) ---
-function GoldCoin({ position, rotation, scale = 1 }) {
-  return (
-    <group position={position} rotation={rotation} scale={scale}>
-      <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <cylinderGeometry args={[1, 1, 0.15, 64]} />
-        <meshStandardMaterial 
-          color="#ffb700" 
-          metalness={1} 
-          roughness={0.15}
-          envMapIntensity={2}
-        />
-      </mesh>
-      {/* Inner Rim */}
-      <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-        <torusGeometry args={[0.9, 0.05, 16, 64]} />
-        <meshStandardMaterial color="#ffd700" metalness={1} roughness={0.2} />
-      </mesh>
-      {/* Crescent Emboss */}
-      <mesh position={[0.1, 0, 0.08]} rotation={[0, 0, Math.PI / 4]}>
-        <torusGeometry args={[0.4, 0.1, 16, 32, Math.PI * 1.3]} />
-        <meshStandardMaterial color="#ffea00" metalness={1} roughness={0.1} />
-      </mesh>
-      <mesh position={[-0.15, 0.2, 0.08]}>
-        <dodecahedronGeometry args={[0.12, 0]} />
-        <meshStandardMaterial color="#ffea00" metalness={1} roughness={0.1} />
-      </mesh>
-    </group>
-  );
-}
-
-// --- The Charity Box (Glass Cube) ---
-function CharityBox() {
-  const boxRef = useRef();
-
-  useFrame((state) => {
-    const t = state.clock.getElapsedTime();
-    boxRef.current.rotation.y = Math.sin(t / 4) * 0.2; // Slow majestic rotation
-    boxRef.current.position.y = Math.sin(t / 2) * 0.2; // Slow float
-  });
-
-  // Random positions for coins inside the box
-  const coins = useMemo(() => {
-    const temp = [];
-    for (let i = 0; i < 15; i++) {
-      temp.push({
-        position: [
-          (Math.random() - 0.5) * 3, 
-          -1.5 + Math.random() * 1.5, 
-          (Math.random() - 0.5) * 3
-        ],
-        rotation: [Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI]
-      });
-    }
-    return temp;
-  }, []);
-
-  return (
-    <group ref={boxRef} position={[0, -1, 0]}>
-      {/* The Glass Box */}
-      <mesh position={[0, 0, 0]}>
-        <boxGeometry args={[4, 4, 4]} />
-        <MeshTransmissionMaterial 
-          backside
-          thickness={0.5}
-          roughness={0.05}
-          transmission={1}
-          ior={1.5}
-          chromaticAberration={0.04}
-          color="#ffffff"
-          distortion={0.1}
-          distortionScale={0.1}
-        />
-      </mesh>
-
-      {/* Gold Frame around the box */}
-      <mesh position={[0, 2, 0]}>
-        <boxGeometry args={[4.1, 0.1, 4.1]} />
-        <meshStandardMaterial color="#b8860b" metalness={1} roughness={0.2} />
-      </mesh>
-      <mesh position={[0, -2, 0]}>
-        <boxGeometry args={[4.1, 0.1, 4.1]} />
-        <meshStandardMaterial color="#b8860b" metalness={1} roughness={0.2} />
-      </mesh>
-      <mesh position={[2, 0, 2]}>
-        <boxGeometry args={[0.1, 4, 0.1]} />
-        <meshStandardMaterial color="#b8860b" metalness={1} roughness={0.2} />
-      </mesh>
-      <mesh position={[-2, 0, 2]}>
-        <boxGeometry args={[0.1, 4, 0.1]} />
-        <meshStandardMaterial color="#b8860b" metalness={1} roughness={0.2} />
-      </mesh>
-      <mesh position={[2, 0, -2]}>
-        <boxGeometry args={[0.1, 4, 0.1]} />
-        <meshStandardMaterial color="#b8860b" metalness={1} roughness={0.2} />
-      </mesh>
-      <mesh position={[-2, 0, -2]}>
-        <boxGeometry args={[0.1, 4, 0.1]} />
-        <meshStandardMaterial color="#b8860b" metalness={1} roughness={0.2} />
-      </mesh>
-
-      {/* Coins inside */}
-      {coins.map((coin, i) => (
-        <GoldCoin key={i} position={coin.position} rotation={coin.rotation} scale={0.5} />
-      ))}
-      
-      {/* A prominent floating coin outside/above */}
-      <Float speed={4} rotationIntensity={1} floatIntensity={2}>
-        <GoldCoin position={[0, 3, 0]} rotation={[Math.PI / 4, Math.PI / 4, 0]} scale={1.2} />
-      </Float>
-    </group>
-  );
-}
+import React from 'react';
+import { motion } from 'framer-motion';
 
 export default function ThreeDHero() {
-  return (
-    <div className="w-full h-full absolute inset-0 z-0">
-      <Canvas camera={{ position: [0, 2, 10], fov: 45 }}>
-        <color attach="background" args={['#020202']} />
-        
-        {/* Realistic Lighting Environment */}
-        <Environment preset="city" />
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[10, 20, 10]} intensity={2} color="#ffffff" castShadow />
-        <pointLight position={[-10, 0, -10]} intensity={5} color="#ec4899" />
-        <pointLight position={[10, -10, 10]} intensity={5} color="#8b5cf6" />
-        
-        <Stars radius={100} depth={50} count={3000} factor={4} saturation={1} fade speed={1.5} />
-        
-        {/* Golden floating Sadaqah sparks */}
-        <Sparkles count={100} scale={12} size={6} speed={0.5} opacity={0.8} color="#fbbf24" />
-        
-        <CharityBox />
-        
-        <ContactShadows position={[0, -4, 0]} opacity={0.7} scale={20} blur={2} far={10} color="#ec4899" />
+  const FloatingCoin = ({ size, top, left, right, bottom, duration, rotateDir, delay, type = 'gold', blur = 0 }) => {
+    const isGold = type === 'gold';
+    const bgGradient = isGold 
+      ? "from-yellow-200 via-yellow-500 to-yellow-700" 
+      : "from-slate-100 via-slate-300 to-slate-500"; 
+    const borderColor = isGold ? "border-yellow-300/60" : "border-slate-400/50";
+    const shadow = isGold ? "shadow-[0_0_30px_rgba(234,179,8,0.3)]" : "shadow-[0_0_30px_rgba(148,163,184,0.3)]";
+    const innerBorder = isGold ? "border-yellow-200/50" : "border-slate-200/50";
 
-        <OrbitControls 
-          enableZoom={false} 
-          enablePan={false} 
-          autoRotate={true}
-          autoRotateSpeed={0.5}
-          maxPolarAngle={Math.PI / 2 + 0.1}
-          minPolarAngle={Math.PI / 2 - 0.2}
-        />
-      </Canvas>
+    return (
+      <motion.div
+        animate={{ 
+          y: [-20, 20, -20], 
+          rotate: rotateDir === 'left' ? [0, -180, -360] : [0, 180, 360] 
+        }}
+        transition={{ duration: duration, repeat: Infinity, ease: "linear", delay: delay }}
+        className={`absolute flex items-center justify-center rounded-full bg-gradient-to-br ${bgGradient} border-[1.5px] ${borderColor} ${shadow}`}
+        style={{ 
+          width: size, 
+          height: size,
+          top: top,
+          left: left,
+          right: right,
+          bottom: bottom,
+          filter: blur > 0 ? `blur(${blur}px)` : 'none',
+          zIndex: blur > 0 ? 0 : 10
+        }}
+      >
+        <div className={`w-[65%] h-[65%] rounded-full border ${innerBorder}`} />
+      </motion.div>
+    );
+  };
+
+  return (
+    // "overflow-hidden" hata diya gaya hai taake koi hard line ya dabba na banay
+    <div className="w-full h-full absolute inset-0 z-0 pointer-events-none">
+      
+      {/* Background Soft Glows - ab daba nahi banega */}
+      <div className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-pink-600/10 rounded-full blur-[120px]" />
+      <div className="absolute bottom-0 right-[10%] w-[40vw] h-[40vw] bg-purple-600/10 rounded-full blur-[120px]" />
+
+      <div className="relative w-full h-full hidden sm:block">
+        
+        {/* === BARE COINS (Front - Clear) === */}
+        <FloatingCoin type="gold" size={120} top="15%" right="8%" duration={8} rotateDir="right" delay={0} />
+        <FloatingCoin type="silver" size={100} bottom="15%" right="18%" duration={9} rotateDir="left" delay={1} />
+        <FloatingCoin type="gold" size={90} top="50%" right="35%" duration={7} rotateDir="left" delay={2} />
+        <FloatingCoin type="silver" size={80} top="25%" right="28%" duration={8.5} rotateDir="right" delay={0.5} />
+
+        {/* === DARMIYANAY COINS (Middle - Clear) === */}
+        <FloatingCoin type="gold" size={60} bottom="35%" right="10%" duration={6} rotateDir="left" delay={1.5} />
+        <FloatingCoin type="silver" size={55} top="10%" right="40%" duration={7} rotateDir="right" delay={0.8} />
+        <FloatingCoin type="gold" size={65} bottom="25%" right="42%" duration={6.5} rotateDir="left" delay={2.5} />
+        <FloatingCoin type="silver" size={50} top="40%" right="12%" duration={5.5} rotateDir="right" delay={1.2} />
+        <FloatingCoin type="gold" size={75} top="70%" right="30%" duration={7.8} rotateDir="right" delay={0.3} />
+        
+        {/* === BACKGROUND COINS (Blurred - For 3D Depth effect) === */}
+        <FloatingCoin type="gold" size={45} top="8%" right="20%" duration={5.5} rotateDir="left" delay={0.7} blur={1} />
+        <FloatingCoin type="gold" size={40} top="20%" right="48%" duration={5} rotateDir="left" delay={0} blur={2} />
+        <FloatingCoin type="silver" size={35} bottom="45%" right="45%" duration={6} rotateDir="right" delay={1.8} blur={1.5} />
+        <FloatingCoin type="silver" size={30} bottom="10%" right="35%" duration={4.5} rotateDir="right" delay={2.2} blur={2} />
+        <FloatingCoin type="gold" size={25} top="35%" right="8%" duration={4} rotateDir="left" delay={1.1} blur={1} />
+        <FloatingCoin type="silver" size={38} top="60%" right="45%" duration={6.2} rotateDir="right" delay={0.4} blur={3} />
+        <FloatingCoin type="gold" size={42} bottom="20%" right="5%" duration={5.8} rotateDir="left" delay={1.6} blur={1.5} />
+        <FloatingCoin type="silver" size={28} top="80%" right="15%" duration={4.8} rotateDir="right" delay={0.9} blur={2} />
+        
+        {/* === TINY SPARKS / DUST COINS === */}
+        <FloatingCoin type="gold" size={15} top="25%" right="15%" duration={3} rotateDir="left" delay={0.2} blur={1} />
+        <FloatingCoin type="silver" size={18} top="55%" right="25%" duration={3.5} rotateDir="right" delay={1.3} blur={1} />
+        <FloatingCoin type="gold" size={12} bottom="30%" right="28%" duration={2.8} rotateDir="left" delay={2.1} blur={0.5} />
+        <FloatingCoin type="silver" size={20} top="45%" right="5%" duration={4} rotateDir="right" delay={0.6} blur={1} />
+
+      </div>
     </div>
   );
 }
