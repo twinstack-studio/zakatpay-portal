@@ -19,6 +19,7 @@ export default function Chatbot() {
     scrollToBottom();
   }, [messages, isTyping, isOpen]);
 
+  // Yeh rahay aapke Quick Replies
   const quickReplies = ["What is Nisab?", "Tax Benefits", "Is it secure?", "How to pay?"];
 
   const handleSend = (text) => {
@@ -53,44 +54,36 @@ export default function Chatbot() {
     <>
       <motion.button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 z-[99999] w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 text-white flex items-center justify-center shadow-[0_10px_25px_rgba(236,72,153,0.5)] transition-transform ${isOpen ? 'hidden' : 'flex'}`}
+        className={`fixed bottom-6 right-6 z-[999999] w-14 h-14 md:w-16 md:h-16 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 text-white flex items-center justify-center shadow-lg transition-transform ${isOpen ? 'hidden' : 'flex'}`}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
       >
-        <MessageSquare size={24} className="md:w-7 md:h-7" />
+        <MessageSquare size={24} />
       </motion.button>
 
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.2 }}
-            // Main fix yahan hai: alignment bottom-right par fix kar di hai aur screen height ke mutabiq max-height de di hai
-            className="fixed z-[100000] bottom-0 right-0 w-full h-[100dvh] md:bottom-24 md:right-8 md:w-[380px] md:h-[500px] md:max-h-[80vh] md:rounded-2xl bg-[#0a0a0c] border-0 md:border border-white/10 shadow-2xl flex flex-col overflow-hidden"
+            // Mobile par full screen (inset-0) aur laptop par bottom-right
+            className="fixed inset-0 z-[999999] w-full h-[100dvh] md:inset-auto md:bottom-24 md:right-8 md:w-[380px] md:h-[500px] md:max-h-[80vh] md:rounded-2xl bg-[#0a0a0c] border-0 md:border border-white/10 shadow-2xl flex flex-col overflow-hidden"
           >
-            <div className="bg-gradient-to-r from-pink-600 to-purple-600 p-4 flex items-center justify-between shadow-md shrink-0">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-pink-600 to-purple-600 p-4 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center border border-white/30">
-                  <Bot size={22} className="text-white" />
-                </div>
-                <div>
-                  <h3 className="text-white font-bold text-sm md:text-base">ZakatPay Assistant</h3>
-                  <p className="text-pink-200 text-xs flex items-center gap-1">
-                    <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span> Always online
-                  </p>
-                </div>
+                <Bot size={22} className="text-white" />
+                <h3 className="text-white font-bold text-sm">ZakatPay Assistant</h3>
               </div>
-              <button 
-                onClick={() => setIsOpen(false)} 
-                className="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors"
-              >
+              <button onClick={() => setIsOpen(false)} className="text-white">
                 <X size={18} />
               </button>
             </div>
 
-            <div className="flex-1 p-4 overflow-y-auto scrollbar-hide space-y-4 bg-gradient-to-b from-[#0a0a0c] to-[#121214]">
+            {/* Messages Area */}
+            <div className="flex-1 p-4 overflow-y-auto space-y-4">
               <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl p-3 flex items-start gap-3 mb-6">
                 <Info size={16} className="text-purple-400 shrink-0 mt-0.5" />
                 <p className="text-xs text-slate-400 leading-relaxed">This is an automated assistant. For complex Shariah rulings, please consult your local religious scholar.</p>
@@ -98,16 +91,12 @@ export default function Chatbot() {
 
               {messages.map((msg, idx) => (
                 <div key={idx} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed shadow-sm ${
-                    msg.type === 'user' 
-                      ? 'bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-tr-sm' 
-                      : 'bg-white/10 text-slate-200 border border-white/5 rounded-tl-sm'
-                  }`}>
+                  <div className={`max-w-[85%] p-3 rounded-2xl text-sm ${msg.type === 'user' ? 'bg-pink-600 text-white rounded-tr-sm' : 'bg-white/10 text-slate-200 border border-white/5 rounded-tl-sm'}`}>
                     {msg.text}
                   </div>
                 </div>
               ))}
-              
+
               {isTyping && (
                 <div className="flex justify-start">
                   <div className="bg-white/10 border border-white/5 p-3 rounded-2xl rounded-tl-sm flex items-center gap-2">
@@ -119,7 +108,10 @@ export default function Chatbot() {
               <div ref={messagesEndRef} />
             </div>
 
-            <div className="p-4 bg-[#0a0a0c] border-t border-white/10 shrink-0 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+            {/* Input & Quick Replies Area */}
+            <div className="p-4 border-t border-white/10 bg-[#0a0a0c] pb-[calc(1rem+env(safe-area-inset-bottom))]">
+              
+              {/* Quick Replies Restored Here */}
               <div className="flex overflow-x-auto scrollbar-hide gap-2 mb-3 pb-1">
                 {quickReplies.map((reply, i) => (
                   <button 
@@ -132,23 +124,20 @@ export default function Chatbot() {
                 ))}
               </div>
 
-              <form 
-                onSubmit={(e) => { e.preventDefault(); handleSend(input); }}
-                className="flex items-center gap-2"
-              >
+              <form onSubmit={(e) => { e.preventDefault(); handleSend(input); }} className="flex gap-2">
                 <input 
                   type="text" 
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
+                  value={input} 
+                  onChange={(e) => setInput(e.target.value)} 
                   placeholder="Ask about Zakat..." 
-                  className="flex-1 bg-white/5 border border-white/10 rounded-full px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all"
+                  className="flex-1 bg-white/5 border border-white/10 rounded-full px-4 py-2 text-sm text-white outline-none focus:border-pink-500" 
                 />
                 <button 
-                  type="submit"
+                  type="submit" 
                   disabled={!input.trim()}
-                  className="w-11 h-11 shrink-0 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transition-transform"
+                  className="w-10 h-10 shrink-0 bg-pink-600 text-white rounded-full flex items-center justify-center disabled:opacity-50"
                 >
-                  <Send size={18} className="ml-1" />
+                  <Send size={16} className="ml-1" />
                 </button>
               </form>
             </div>
