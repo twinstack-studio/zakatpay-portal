@@ -1,0 +1,22 @@
+# Render blueprint. Import the repo on render.com and it picks this up.
+# The secret values are intentionally not here - set them in the dashboard.
+services:
+  - type: web
+    name: zakatpay-api
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false
