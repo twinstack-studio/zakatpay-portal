@@ -5,10 +5,6 @@
     { "src": "api/index.js", "use": "@vercel/node" }
   ],
   "rewrites": [
-    {
-      "comment": "The Express app owns its own routing, so hand it every path.",
-      "source": "/(.*)",
-      "destination": "/api/index.js"
-    }
+    { "source": "/(.*)", "destination": "/api/index.js" }
   ]
 }
