@@ -1,4 +1,5 @@
-# Render blueprint. Import the repo on render.com and it picks this up.
+# Render blueprint. Must live at the repo root - Render only looks for
+# render.yaml here, not inside a subfolder.
 # The secret values are intentionally not here - set them in the dashboard.
 services:
   - type: web
