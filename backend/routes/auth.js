@@ -18,7 +18,7 @@ router.post('/send-otp', async (req, res) => {
     return res.status(400).json({ success: false, message: 'Please enter a valid email address.' });
   }
 
-  const gate = otpStore.canSend(email);
+  const gate = await otpStore.canSend(email);
   if (!gate.ok) {
     return res.status(429).json({
       success: false,
@@ -29,8 +29,8 @@ router.post('/send-otp', async (req, res) => {
     });
   }
 
-  const code = otpStore.issue(email);
-  otpStore.recordSend(email);
+  // issue() also records the send against the throttle window.
+  const code = await otpStore.issue(email);
 
   try {
     const mail = otpEmail(code);
@@ -54,9 +54,9 @@ router.post('/send-otp', async (req, res) => {
 
 /* ---------------------------------------------------------- verify OTP */
 
-router.post('/verify-otp', (req, res) => {
+router.post('/verify-otp', async (req, res) => {
   const email = cleanEmail(req.body.email);
-  const result = otpStore.verify(email, req.body.otp);
+  const result = await otpStore.verify(email, req.body.otp);
 
   if (result.ok) return res.json({ success: true, message: 'Email verified.' });
 

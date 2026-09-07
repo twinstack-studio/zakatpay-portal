@@ -1,39 +1,11 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
+/**
+ * Local / long-running entry point. Vercel uses api/index.js instead, which
+ * exports the same app without listening on a port.
+ */
+require('dotenv').config({ quiet: true });
+
+const app = require('./app');
 const { verifyMailer } = require('./config/mailer');
-
-const app = express();
-app.set('trust proxy', 1); // hosts (Render/Railway/Fly) sit behind a proxy
-
-/* ----------------------------------------------------------------- CORS */
-
-// Previously `cors()` allowed every origin on the internet. Only the sites we
-// actually ship should be able to call this API.
-const allowed = (process.env.ALLOWED_ORIGINS || '')
-  .split(',')
-  .map((o) => o.trim())
-  .filter(Boolean);
-
-app.use(cors({
-  origin(origin, cb) {
-    // No Origin header: curl, health checks, same-origin server calls.
-    if (!origin) return cb(null, true);
-    if (allowed.length === 0) return cb(null, true); // dev default
-    if (allowed.includes(origin)) return cb(null, true);
-    // Any Vercel preview deployment of this project.
-    if (/^https:\/\/[a-z0-9-]+\.vercel\.app$/.test(origin) && process.env.ALLOW_VERCEL_PREVIEWS === 'true') {
-      return cb(null, true);
-    }
-    return cb(new Error(`Origin ${origin} is not allowed`));
-  },
-  credentials: true,
-}));
-
-app.use(express.json({ limit: '100kb' }));
-
-/* -------------------------------------------------------------- startup */
 
 const required = ['MONGO_URI', 'JWT_SECRET'];
 const missing = required.filter((k) => !process.env[k]);
@@ -42,45 +14,24 @@ if (missing.length) {
   process.exit(1);
 }
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ MongoDB connected'))
-  .catch((err) => {
+const PORT = process.env.PORT || 5001;
+
+(async () => {
+  try {
+    await app.connectDb();
+    console.log('✅ MongoDB connected');
+  } catch (err) {
     console.error('❌ MongoDB connection failed:', err.message);
     process.exit(1);
-  });
-
-verifyMailer();
-
-/* --------------------------------------------------------------- routes */
-
-// Hosting platforms ping this to decide whether the service is alive, and it
-// is a quick way to check the API is reachable from a phone.
-app.get('/api/health', (req, res) => {
-  res.json({
-    ok: true,
-    db: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
-    uptime: Math.round(process.uptime()),
-  });
-});
-
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/user', require('./routes/user'));
-
-app.use((req, res) => res.status(404).json({ success: false, message: 'Not found' }));
-
-// eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
-  if (err && /not allowed/.test(err.message || '')) {
-    return res.status(403).json({ success: false, message: 'Origin not allowed.' });
   }
-  console.error('Unhandled error:', err);
-  res.status(500).json({ success: false, message: 'Something went wrong.' });
-});
 
-const PORT = process.env.PORT || 5001;
-// 0.0.0.0 so the service is reachable inside a container / from other devices
-// on the network, not just from this machine.
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`ZakatPay API listening on port ${PORT}`);
-  console.log(`Allowed origins: ${allowed.length ? allowed.join(', ') : '(all - set ALLOWED_ORIGINS in production)'}`);
-});
+  // Warm the SMTP pool so the first user does not pay the handshake.
+  await verifyMailer();
+
+  // 0.0.0.0 so the API is reachable from other devices on the network and
+  // from inside a container, not only from this machine.
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`ZakatPay API listening on port ${PORT}`);
+    console.log(`Allowed origins: ${app.allowedOrigins.length ? app.allowedOrigins.join(', ') : '(all - set ALLOWED_ORIGINS in production)'}`);
+  });
+})();
