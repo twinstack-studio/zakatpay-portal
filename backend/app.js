@@ -54,11 +54,47 @@ async function connectDb() {
         maxPoolSize: 5,
         serverSelectionTimeoutMS: 10000,
       })
-      .then((m) => m);
+      .then((m) => m)
+      .catch((err) => {
+        // Let the next request retry instead of caching a rejected promise
+        // forever, and keep the reason so /api/health can report it.
+        cached.promise = null;
+        cached.lastError = err.message;
+        throw err;
+      });
   }
   cached.conn = await cached.promise;
   return cached.conn;
 }
+
+/**
+ * Deliberately declared BEFORE the database middleware: if this needed the
+ * database it would be useless for diagnosing a database problem.
+ *
+ * Reports which required variables are MISSING by name only - never a value.
+ */
+app.get('/api/health', async (req, res) => {
+  const required = ['MONGO_URI', 'JWT_SECRET', 'EMAIL_USER', 'EMAIL_PASS'];
+  const missing = required.filter((k) => !process.env[k]);
+  const states = ['disconnected', 'connected', 'connecting', 'disconnecting'];
+
+  // Actually attempt the connection rather than reporting on a connection
+  // nobody asked for - on a fresh instance there would be nothing to report.
+  let dbError = null;
+  try {
+    await connectDb();
+  } catch (err) {
+    dbError = err.message;
+  }
+
+  res.json({
+    ok: mongoose.connection.readyState === 1 && missing.length === 0,
+    db: states[mongoose.connection.readyState] || 'unknown',
+    missingEnv: missing,
+    dbError,
+    uptime: Math.round(process.uptime()),
+  });
+});
 
 // Every route below needs the database, so connect (or reuse) before handling.
 app.use(async (req, res, next) => {
@@ -72,14 +108,6 @@ app.use(async (req, res, next) => {
 });
 
 /* --------------------------------------------------------------- routes */
-
-app.get('/api/health', (req, res) => {
-  res.json({
-    ok: true,
-    db: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
-    uptime: Math.round(process.uptime()),
-  });
-});
 
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/user', require('./routes/user'));
