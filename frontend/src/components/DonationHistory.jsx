@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Receipt, Loader2, Calendar, Building2, CheckCircle2 } from 'lucide-react';
+import { USER_URL, apiFetch } from '../config';
 
 export default function DonationHistory({ user }) {
   const [history, setHistory] = useState([]);
@@ -12,13 +13,10 @@ export default function DonationHistory({ user }) {
         return;
       }
       try {
-        const res = await fetch('http://localhost:5001/api/user/history', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: user.email })
-        });
-        const data = await res.json();
-        if (data.success) {
+        // The account comes from the auth token now - posting an email would
+        // let anyone read anyone else's records.
+        const { ok, data } = await apiFetch(`${USER_URL}/history`);
+        if (ok && data.success) {
           setHistory(data.history);
         }
       } catch (err) {

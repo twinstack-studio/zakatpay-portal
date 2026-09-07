@@ -6,6 +6,7 @@ import {
   BookOpen, Newspaper, PlaySquare, Shield, Menu, X, ArrowRight
 } from 'lucide-react';
 import Tilt from 'react-parallax-tilt';
+import { clearSession } from './config';
 import CustomCursor from './components/CustomCursor';
 
 // === COMPONENTS & PAGES ===
@@ -196,7 +197,7 @@ export default function App() {
     }
   }, [language]);
 
-  const handleLogout = () => { localStorage.removeItem('zakatUser'); setUser(null); };
+  const handleLogout = () => { clearSession(); setUser(null); };
 
   return (
     <div className="min-h-screen bg-black text-slate-200 font-sans selection:bg-pink-500 selection:text-white flex flex-col overflow-x-hidden">

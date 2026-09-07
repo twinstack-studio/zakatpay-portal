@@ -3,7 +3,7 @@ import { X, Mail, KeyRound, ArrowRight, Loader2, CheckCircle2, User, Eye, EyeOff
 
 // Nayi libraries for real Google Login
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from 'jwt-decode'; // Agar aage kabhi jwt ki zaroorat pari
+import { AUTH_URL, saveSession } from '../config';
 
 // === KHOOBSURAT GOOGLE ICON ===
 const GoogleIcon = () => (
@@ -32,7 +32,6 @@ function AuthModalContent({ isOpen, onClose, setUser }) {
   const [resendTimer, setResendTimer] = useState(0);
   const [justRegistered, setJustRegistered] = useState(false); 
 
-  const API_BASE_URL = 'http://localhost:5001/api/auth'; 
 
   useEffect(() => {
     let interval;
@@ -57,26 +56,20 @@ function AuthModalContent({ isOpen, onClose, setUser }) {
       setIsLoading(true);
       setError('');
       try {
-        const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
-        });
-        const userInfo = await userInfoRes.json();
-        const { name, email, sub: googleId } = userInfo;
-
-        const response = await fetch(`${API_BASE_URL}/google-login`, {
+        // The profile is fetched server-side from this token, so the browser
+        // cannot claim to be an account it does not own.
+        const response = await fetch(`${AUTH_URL}/google-login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, googleId })
+          body: JSON.stringify({ accessToken: tokenResponse.access_token })
         });
 
-        const text = await response.text();
-        let data;
-        try { data = JSON.parse(text); } catch (err) { data = { message: 'Backend Error: Check URL or Restart Server.' } }
+        let data = {};
+        try { data = await response.json(); } catch { data = { message: 'Could not reach the server.' }; }
 
-        if (response.ok) {
-          const userData = { name: data.user?.name || name, email: data.user?.email || email };
-          setUser(userData);
-          localStorage.setItem('zakatUser', JSON.stringify(userData));
+        if (response.ok && data.success) {
+          setUser(data.user);
+          saveSession(data.token, data.user);
           handleClose();
         } else {
           setError(data.message || 'Google Login failed on our server.');
@@ -103,13 +96,14 @@ function AuthModalContent({ isOpen, onClose, setUser }) {
     if (!email) { setError('Please enter your email.'); return; }
     setError(''); setIsLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/send-otp`, {
+      const response = await fetch(`${AUTH_URL}/send-otp`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email })
       });
       const data = await response.json();
       if (response.ok) {
-        setTimeout(() => { setResendTimer(60); setStep('otp'); setIsLoading(false); }, 1000);
+        setResendTimer(data.retryAfter || 45); setStep('otp'); setIsLoading(false);
       } else {
+        if (data.retryAfter) setResendTimer(data.retryAfter);
         setError(data.message || 'Failed to send OTP.'); setIsLoading(false);
       }
     } catch (err) { setError('Network Error.'); setIsLoading(false); }
@@ -122,15 +116,15 @@ function AuthModalContent({ isOpen, onClose, setUser }) {
 
   const handleVerifyOTP = async (e) => {
     e.preventDefault();
-    if (otp.length < 4) { setError('Please enter a valid OTP.'); return; }
+    if (otp.trim().length !== 6) { setError('Please enter the 6-digit code.'); return; }
     setError(''); setIsLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/verify-otp`, {
+      const response = await fetch(`${AUTH_URL}/verify-otp`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, otp })
       });
       const data = await response.json();
       if (response.ok) {
-        setTimeout(() => { setStep('register'); setIsLoading(false); }, 1500);
+        setStep('register'); setIsLoading(false);
       } else {
         setError(data.message || 'Invalid OTP.'); setIsLoading(false);
       }
@@ -146,13 +140,16 @@ function AuthModalContent({ isOpen, onClose, setUser }) {
 
     setIsLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/register`, {
+      const response = await fetch(`${AUTH_URL}/register`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, password })
       });
       const data = await response.json();
-      if (response.ok) {
-        setJustRegistered(true); 
-        setTimeout(() => { setStep('login'); setPassword(''); setIsLoading(false); }, 1500);
+      if (response.ok && data.success) {
+        // The account was just verified by OTP - no reason to make them log in again.
+        setUser(data.user);
+        saveSession(data.token, data.user);
+        setIsLoading(false);
+        handleClose();
       } else {
         setError(data.message || 'Registration failed.'); setIsLoading(false);
       }
@@ -164,16 +161,14 @@ function AuthModalContent({ isOpen, onClose, setUser }) {
     if (!password) { setError('Please enter your password.'); return; }
     setError(''); setIsLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/login`, {
+      const response = await fetch(`${AUTH_URL}/login`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password })
       });
       const data = await response.json();
-      if (response.ok) {
-        setTimeout(() => {
-          const userData = { name: data.user.name, email: data.user.email };
-          setUser(userData); localStorage.setItem('zakatUser', JSON.stringify(userData));
-          handleClose(); setIsLoading(false);
-        }, 1000);
+      if (response.ok && data.success) {
+        setUser(data.user);
+        saveSession(data.token, data.user);
+        handleClose(); setIsLoading(false);
       } else {
         setError(data.message || 'Invalid email or password.'); setIsLoading(false);
       }
@@ -254,7 +249,7 @@ function AuthModalContent({ isOpen, onClose, setUser }) {
               <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Enter OTP</label>
               <div className="relative">
                 <KeyRound className="absolute left-4 top-3.5 text-slate-500" size={18} />
-                <input type="text" required placeholder="Enter Code" value={otp} onChange={(e) => setOtp(e.target.value)} className="w-full bg-[#13141a] border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white font-mono tracking-widest text-lg outline-none focus:border-purple-500 transition-colors text-center" />
+                <input type="text" inputMode="numeric" autoComplete="one-time-code" maxLength={6} required placeholder="------" value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))} className="w-full bg-[#13141a] border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white font-mono tracking-widest text-lg outline-none focus:border-purple-500 transition-colors text-center" />
               </div>
             </div>
             <button type="submit" disabled={isLoading} className="w-full bg-white text-purple-700 hover:text-pink-600 font-bold py-3 sm:py-3.5 rounded-xl transition-all shadow-lg flex justify-center items-center gap-2">
@@ -359,7 +354,11 @@ function AuthModalContent({ isOpen, onClose, setUser }) {
 // ===============================================
 export default function AuthModal(props) {
   // Yahan apni ID daal dein
-  const GOOGLE_CLIENT_ID = "528496242536-r9ntmnoiinph7n85e7f8ve6dok85j9c0.apps.googleusercontent.com";
+  // Configurable so the deployed site can use its own OAuth client without a
+  // code change. Falls back to the original id for local development.
+  const GOOGLE_CLIENT_ID =
+    import.meta.env.VITE_GOOGLE_CLIENT_ID ||
+    '528496242536-r9ntmnoiinph7n85e7f8ve6dok85j9c0.apps.googleusercontent.com';
   
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>

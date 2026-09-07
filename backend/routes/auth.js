@@ -2,117 +2,182 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
-const nodemailer = require('nodemailer');
 
-const otpStore = {};
+const { transporter, otpEmail } = require('../config/mailer');
+const otpStore = require('../utils/otpStore');
+const { signToken } = require('../middleware/auth');
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
+const cleanEmail = (e) => String(e || '').trim().toLowerCase();
+const looksLikeEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 
-// 1. SEND OTP (SPAM FIX ADDED)
+/* ------------------------------------------------------------ send OTP */
+
 router.post('/send-otp', async (req, res) => {
-  const { email } = req.body;
-  if (!email) return res.status(400).json({ success: false, message: "Email is required" });
+  const email = cleanEmail(req.body.email);
+  if (!looksLikeEmail(email)) {
+    return res.status(400).json({ success: false, message: 'Please enter a valid email address.' });
+  }
 
-  const otp = Math.floor(1000 + Math.random() * 9000).toString();
-  otpStore[email] = otp; 
+  const gate = otpStore.canSend(email);
+  if (!gate.ok) {
+    return res.status(429).json({
+      success: false,
+      retryAfter: gate.retryAfter,
+      message: gate.reason === 'cooldown'
+        ? `Please wait ${gate.retryAfter}s before requesting another code.`
+        : 'Too many codes requested. Please try again later.',
+    });
+  }
+
+  const code = otpStore.issue(email);
+  otpStore.recordSend(email);
 
   try {
+    const mail = otpEmail(code);
     await transporter.sendMail({
-      from: `"ZakatPay Support" <${process.env.EMAIL_USER}>`,
+      from: `"ZakatPay" <${process.env.EMAIL_USER}>`,
       to: email,
-      replyTo: process.env.EMAIL_USER, // Spam fix header
-      subject: 'Your ZakatPay Verification Code',
-      // Plain text added to bypass spam filters
-      text: `Your secure verification code for ZakatPay is: ${otp}. Please do not share this code.`, 
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 10px;">
-          <h2 style="color: #ec4899; text-align: center;">ZakatPay Verification</h2>
-          <p style="color: #4b5563; font-size: 16px;">Hello,</p>
-          <p style="color: #4b5563; font-size: 14px;">Please use the following 4-digit code to verify your email address:</p>
-          <div style="text-align: center; margin: 30px 0;">
-            <span style="font-size: 32px; font-weight: bold; color: #111827; background: #f3f4f6; padding: 15px 30px; border-radius: 8px; letter-spacing: 8px;">${otp}</span>
-          </div>
-          <p style="color: #9ca3af; font-size: 12px; text-align: center;">If you didn't request this, you can safely ignore this email.</p>
-        </div>
-      `
+      replyTo: process.env.EMAIL_USER,
+      subject: mail.subject,
+      text: mail.text,
+      html: mail.html,
     });
-    console.log(`Backend: Real OTP sent to ${email} (Anti-Spam Applied)`);
-    res.json({ success: true, message: "OTP Sent Successfully" });
-  } catch (error) {
-    console.error("OTP Sending Error:", error);
-    return res.status(500).json({ success: false, message: "Failed to send OTP." });
+    res.json({ success: true, message: 'Verification code sent.' });
+  } catch (err) {
+    console.error('OTP send failed:', err.message);
+    res.status(502).json({
+      success: false,
+      message: 'Could not send the email right now. Please try again in a moment.',
+    });
   }
 });
 
+/* ---------------------------------------------------------- verify OTP */
+
 router.post('/verify-otp', (req, res) => {
-  const { email, otp } = req.body;
-  if (otpStore[email] && otpStore[email] === otp) {
-    delete otpStore[email]; 
-    res.json({ success: true, message: "OTP Verified" });
-  } else {
-    res.status(400).json({ success: false, message: "Invalid or expired OTP" });
-  }
+  const email = cleanEmail(req.body.email);
+  const result = otpStore.verify(email, req.body.otp);
+
+  if (result.ok) return res.json({ success: true, message: 'Email verified.' });
+
+  const messages = {
+    missing: 'No code was requested for this email. Please request a new one.',
+    expired: 'That code has expired. Please request a new one.',
+    locked: 'Too many incorrect attempts. Please request a new code.',
+    mismatch: result.left > 0
+      ? `Incorrect code. ${result.left} attempt${result.left === 1 ? '' : 's'} left.`
+      : 'Incorrect code. Please request a new one.',
+  };
+  res.status(400).json({ success: false, reason: result.reason, message: messages[result.reason] });
 });
+
+/* ----------------------------------------------------------- register */
 
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password } = req.body;
-    let user = await User.findOne({ email });
-    if (user) return res.status(400).json({ success: false, message: "Account already exists" });
+    const name = String(req.body.name || '').trim();
+    const email = cleanEmail(req.body.email);
+    const password = String(req.body.password || '');
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    if (!name) return res.status(400).json({ success: false, message: 'Please enter your name.' });
+    if (!looksLikeEmail(email)) return res.status(400).json({ success: false, message: 'Please enter a valid email address.' });
+    if (password.length < 8) {
+      return res.status(400).json({ success: false, message: 'Password must be at least 8 characters.' });
+    }
 
-    user = new User({ name, email, password: hashedPassword });
-    await user.save();
-    res.json({ success: true, message: "Account Created Successfully" });
+    if (await User.findOne({ email })) {
+      return res.status(409).json({ success: false, message: 'An account with this email already exists.' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, await bcrypt.genSalt(10));
+    const user = await new User({ name, email, password: hashedPassword }).save();
+
+    res.json({
+      success: true,
+      message: 'Account created.',
+      token: signToken(user),
+      user: { name: user.name, email: user.email },
+    });
   } catch (err) {
-    res.status(500).json({ success: false, message: "Server Error during registration" });
+    console.error('Register error:', err.message);
+    res.status(500).json({ success: false, message: 'Could not create the account. Please try again.' });
   }
 });
+
+/* -------------------------------------------------------------- login */
 
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const email = cleanEmail(req.body.email);
+    const password = String(req.body.password || '');
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ success: false, message: "Account not found" });
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ success: false, message: "Invalid password" });
+    // Same message either way, so this cannot be used to discover which
+    // addresses have accounts.
+    const invalid = () =>
+      res.status(401).json({ success: false, message: 'Incorrect email or password.' });
 
-    res.json({ success: true, user: { name: user.name, email: user.email } });
+    if (!user) return invalid();
+    if (!(await bcrypt.compare(password, user.password))) return invalid();
+
+    res.json({
+      success: true,
+      token: signToken(user),
+      user: { name: user.name, email: user.email },
+    });
   } catch (err) {
-    res.status(500).json({ success: false, message: "Server Error during login" });
+    console.error('Login error:', err.message);
+    res.status(500).json({ success: false, message: 'Could not sign you in. Please try again.' });
   }
 });
 
-// ===============================================
-// NAYA ROUTE: REAL-TIME GOOGLE LOGIN KE LIYE
-// ===============================================
+/* ------------------------------------------------------- google login */
+
+/**
+ * The browser sends the Google access token, NOT the profile.
+ *
+ * Previously the client posted {name, email, googleId} and the server trusted
+ * them, so anyone could POST a stranger's address to this endpoint and be
+ * handed a valid session for their account. The token is now exchanged with
+ * Google here, server-side, and only the identity Google returns is used.
+ */
 router.post('/google-login', async (req, res) => {
   try {
-    const { name, email, googleId } = req.body;
-    let user = await User.findOne({ email });
-
-    // Agar user pehle se nahi hai, toh automatic register kar do
-    if (!user) {
-      const salt = await bcrypt.genSalt(10);
-      // Google user ke liye random secure password bana diya hai
-      const hashedPassword = await bcrypt.hash(googleId + process.env.JWT_SECRET, salt); 
-      user = new User({ name, email, password: hashedPassword });
-      await user.save();
+    const accessToken = String(req.body.accessToken || '');
+    if (!accessToken) {
+      return res.status(400).json({ success: false, message: 'Google sign-in failed. Please try again.' });
     }
 
-    res.json({ success: true, user: { name: user.name, email: user.email } });
+    const profileRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!profileRes.ok) {
+      return res.status(401).json({ success: false, message: 'Google could not verify that sign-in.' });
+    }
+
+    const profile = await profileRes.json();
+    const email = cleanEmail(profile.email);
+    if (!looksLikeEmail(email) || profile.email_verified === false) {
+      return res.status(401).json({ success: false, message: 'That Google account has no verified email.' });
+    }
+    const name = String(profile.name || '').trim() || email.split('@')[0];
+
+    let user = await User.findOne({ email });
+    if (!user) {
+      const random = require('crypto').randomBytes(32).toString('hex');
+      const hashedPassword = await bcrypt.hash(random, await bcrypt.genSalt(10));
+      user = await new User({ name, email, password: hashedPassword }).save();
+    }
+
+    res.json({
+      success: true,
+      token: signToken(user),
+      user: { name: user.name, email: user.email },
+    });
   } catch (err) {
-    console.error("Google Login Backend Error:", err);
-    res.status(500).json({ success: false, message: "Google Login Failed on Server" });
+    console.error('Google login error:', err.message);
+    res.status(500).json({ success: false, message: 'Google sign-in failed. Please try again.' });
   }
 });
 
