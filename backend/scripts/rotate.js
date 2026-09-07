@@ -84,6 +84,32 @@ async function setEmailPassword() {
   console.log('  EMAIL_PASS updated.\n');
 }
 
+/**
+ * Print each variable separately, ready to paste into a hosting dashboard.
+ *
+ * Pasting the whole .env into one field is the mistake that broke the first
+ * deployment - the value ended up containing "MONGO_URI=" and Mongo rejected
+ * the connection string. One clearly labelled value at a time avoids that.
+ */
+function showForHost() {
+  const env = readEnv();
+  const keys = ['MONGO_URI', 'JWT_SECRET', 'EMAIL_USER', 'EMAIL_PASS'];
+  console.log('');
+  console.log('  Copy each VALUE on its own - do NOT include the name or the "=".');
+  console.log('');
+  for (const k of keys) {
+    const m = env.match(new RegExp('^' + k + '=(.*)$', 'm'));
+    console.log('  ' + '-'.repeat(64));
+    console.log('  KEY   : ' + k);
+    console.log('  VALUE : ' + (m ? m[1] : '(not set)'));
+  }
+  console.log('  ' + '-'.repeat(64));
+  console.log('');
+  console.log('  ALLOWED_ORIGINS is not a secret - leave it as it is.');
+  console.log('');
+  process.exit(0);
+}
+
 async function verify() {
   console.log('\n  Checking the new credentials...\n');
   delete require.cache[require.resolve('dotenv')];
@@ -119,9 +145,12 @@ async function verify() {
   console.log('  1) Database password');
   console.log('  2) Gmail App Password');
   console.log('  3) Both');
-  console.log('  4) Just check the current ones\n');
+  console.log('  4) Just check the current ones');
+  console.log('  5) Show the values to paste into the host (Vercel)');
+  console.log('');
 
-  const choice = await ask('Choose 1-4: ');
+  const choice = await ask('Choose 1-5: ');
+  if (choice === '5') return showForHost();
   if (choice === '1' || choice === '3') await setMongoPassword();
   if (choice === '2' || choice === '3') await setEmailPassword();
   await verify();
