@@ -8,9 +8,8 @@
     "dev": "nodemon server.js",
     "rotate": "node scripts/rotate.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "TwinStack Studio",
+  "license": "UNLICENSED",
   "type": "commonjs",
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -19,13 +18,13 @@
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.9.4",
-    "nodemailer": "^9.0.5",
-    "twilio": "^6.1.0"
+    "nodemailer": "^9.1.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "private": true
 }
