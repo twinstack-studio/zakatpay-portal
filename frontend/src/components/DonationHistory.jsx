@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Receipt, Loader2, Calendar, Building2, CheckCircle2 } from 'lucide-react';
 import { USER_URL, apiFetch } from '../config';
 

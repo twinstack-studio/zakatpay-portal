@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Coins, Landmark, RefreshCcw, HeartHandshake } from 'lucide-react';
 // 1. React Router ka Link import kiya
 import { Link } from 'react-router-dom';
@@ -13,39 +13,27 @@ const SILVER_RATE_PER_TOLA = 3150;
 export default function ZakatCalculator() {
   const [assets, setAssets] = useState({ cash: '', bank: '', gold: '', silver: '', investments: '', businessInventory: '' });
   const [liabilities, setLiabilities] = useState({ debts: '', bills: '' });
-  const [totalZakat, setTotalZakat] = useState(0);
-  const [totalNetWorth, setTotalNetWorth] = useState(0);
-  
+
   // Zakat ka Nisab (Barkaraar)
-  const nisabSilver = 52.5 * SILVER_RATE_PER_TOLA; 
+  const nisabSilver = 52.5 * SILVER_RATE_PER_TOLA;
 
   // Dropdown aur purane donation flow ke states ko hata diya gaya hai kyunke ab hum direct foundations page par bhej rahe hain.
 
   const handleAssetChange = (e) => setAssets({ ...assets, [e.target.name]: e.target.value });
   const handleLiabilityChange = (e) => setLiabilities({ ...liabilities, [e.target.name]: e.target.value });
 
-  useEffect(() => {
-    // 2. TOLA KO RUPEES MEIN CONVERT KARNE WALI LOGIC (Barkaraar)
-    const sumAssets = Object.entries(assets).reduce((acc, [key, value]) => {
-      let numericValue = Number(value) || 0;
-      if (key === 'gold') numericValue *= GOLD_RATE_PER_TOLA;
-      if (key === 'silver') numericValue *= SILVER_RATE_PER_TOLA;
-      return acc + numericValue;
-    }, 0);
+  // 2. TOLA KO RUPEES MEIN CONVERT KARNE WALI LOGIC (Barkaraar)
+  // Totals are derived from the inputs on every render, so they never lag behind them.
+  const sumAssets = Object.entries(assets).reduce((acc, [key, value]) => {
+    let numericValue = Number(value) || 0;
+    if (key === 'gold') numericValue *= GOLD_RATE_PER_TOLA;
+    if (key === 'silver') numericValue *= SILVER_RATE_PER_TOLA;
+    return acc + numericValue;
+  }, 0);
 
-    const sumLiabilities = Object.values(liabilities).reduce((acc, curr) => acc + (Number(curr) || 0), 0);
-    const netWorth = sumAssets - sumLiabilities;
-    
-    setTotalNetWorth(netWorth);
-    if (netWorth >= nisabSilver) {
-      const zakat = netWorth * 0.025;
-      setTotalZakat(zakat);
-      // setDonateAmount logic removed as we don't need it here anymore
-    } else {
-      setTotalZakat(0);
-      // Purane flow control states reset logic removed
-    }
-  }, [assets, liabilities, nisabSilver]);
+  const sumLiabilities = Object.values(liabilities).reduce((acc, curr) => acc + (Number(curr) || 0), 0);
+  const totalNetWorth = sumAssets - sumLiabilities;
+  const totalZakat = totalNetWorth >= nisabSilver ? totalNetWorth * 0.025 : 0;
 
   const resetCalculator = () => {
     setAssets({ cash: '', bank: '', gold: '', silver: '', investments: '', businessInventory: '' });

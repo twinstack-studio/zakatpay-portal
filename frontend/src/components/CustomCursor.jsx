@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
 export default function CustomCursor() {
   const [mousePosition, setMousePosition] = useState({ x: -100, y: -100 });
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  // Mobile/Touch devices par disable rakhein
+  const [isTouchDevice] = useState(() => window.matchMedia("(pointer: coarse)").matches);
 
   useEffect(() => {
-    // Mobile/Touch devices par disable rakhein
-    if (window.matchMedia("(pointer: coarse)").matches) {
-      setIsTouchDevice(true);
-      return;
-    }
+    if (isTouchDevice) return;
 
     const updateMousePosition = (e) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
@@ -18,7 +15,7 @@ export default function CustomCursor() {
 
     window.addEventListener('mousemove', updateMousePosition);
     return () => window.removeEventListener('mousemove', updateMousePosition);
-  }, []);
+  }, [isTouchDevice]);
 
   if (isTouchDevice) return null;
 

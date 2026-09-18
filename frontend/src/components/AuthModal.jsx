@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Mail, KeyRound, ArrowRight, Loader2, CheckCircle2, User, Eye, EyeOff, ShieldCheck, RefreshCw } from 'lucide-react';
 
 // Nayi libraries for real Google Login
@@ -106,7 +106,7 @@ function AuthModalContent({ isOpen, onClose, setUser }) {
         if (data.retryAfter) setResendTimer(data.retryAfter);
         setError(data.message || 'Failed to send OTP.'); setIsLoading(false);
       }
-    } catch (err) { setError('Network Error.'); setIsLoading(false); }
+    } catch { setError('Network Error.'); setIsLoading(false); }
   };
 
   const handleResendOTP = () => {
@@ -128,7 +128,7 @@ function AuthModalContent({ isOpen, onClose, setUser }) {
       } else {
         setError(data.message || 'Invalid OTP.'); setIsLoading(false);
       }
-    } catch (err) { setError('Network Error.'); setIsLoading(false); }
+    } catch { setError('Network Error.'); setIsLoading(false); }
   };
 
   const handleRegister = async (e) => {
@@ -153,7 +153,7 @@ function AuthModalContent({ isOpen, onClose, setUser }) {
       } else {
         setError(data.message || 'Registration failed.'); setIsLoading(false);
       }
-    } catch (err) { setError('Network Error.'); setIsLoading(false); }
+    } catch { setError('Network Error.'); setIsLoading(false); }
   };
 
   const handleLogin = async (e) => {
@@ -172,7 +172,7 @@ function AuthModalContent({ isOpen, onClose, setUser }) {
       } else {
         setError(data.message || 'Invalid email or password.'); setIsLoading(false);
       }
-    } catch (err) { setError('Network Error.'); setIsLoading(false); }
+    } catch { setError('Network Error.'); setIsLoading(false); }
   };
 
   return (

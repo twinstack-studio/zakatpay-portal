@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { PlaySquare, PlayCircle, X } from 'lucide-react';
 
 // === 100% WORKING ZAKAT YOUTUBE VIDEOS ===

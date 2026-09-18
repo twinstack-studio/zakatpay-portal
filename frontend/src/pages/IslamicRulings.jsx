@@ -1,4 +1,3 @@
-import React from 'react';
 import { BookOpen, Award, Quote, CheckCircle2, AlertCircle, Bookmark } from 'lucide-react';
 
 // === PICTURES IMPORT ===

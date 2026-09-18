@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
   LayoutDashboard, Users, Building2, FileText, Settings, 
   TrendingUp, DollarSign, Activity, Search, Bell, LogOut, ChevronRight

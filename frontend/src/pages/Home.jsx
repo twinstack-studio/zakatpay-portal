@@ -1,6 +1,5 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ShieldCheck, Calculator, Globe, FileText, Lock } from 'lucide-react';
+import { ArrowRight, Calculator, Globe, FileText, Lock } from 'lucide-react';
 import ThreeDHero from '../components/ThreeDHero';
 import AnimatedSection from '../components/AnimatedSection';
 

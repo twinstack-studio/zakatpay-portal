@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, User, Mail, Phone, MapPin, Globe, Loader2, ShieldCheck, HeartHandshake } from 'lucide-react';
-import { foundationsData } from './Foundations';
+import { foundationsData } from '../data/foundations';
 
 const countriesList = [
   "Pakistan", "United Arab Emirates", "Saudi Arabia", "United Kingdom", "United States", "Australia", "Canada", "Other"
@@ -12,12 +12,15 @@ export default function Donate() {
   const navigate = useNavigate();
   const ngo = foundationsData.find((f) => f.id === id);
 
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', country: 'Pakistan', city: '', amount: '' });
+  // Prefill the donor's name and email from the saved session on first render.
+  const [formData, setFormData] = useState(() => {
+    const initial = { name: '', email: '', phone: '', country: 'Pakistan', city: '', amount: '' };
+    const savedUser = JSON.parse(localStorage.getItem('zakatUser'));
+    return savedUser ? { ...initial, name: savedUser.name || '', email: savedUser.email || '' } : initial;
+  });
   const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
-    const savedUser = JSON.parse(localStorage.getItem('zakatUser'));
-    if (savedUser) setFormData(prev => ({ ...prev, name: savedUser.name || '', email: savedUser.email || '' }));
     window.scrollTo(0, 0);
   }, []);
 
