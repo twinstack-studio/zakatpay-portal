@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Building2, ShieldCheck, TrendingUp, FileText, CheckCircle2, ArrowRight, Mail, Phone, HeartHandshake } from 'lucide-react';
 
 export default function PartnerNGO() {
-  const [formData, setFormData] = useState({ name: '', regNo: '', email: '', phone: '', message: '' });
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = (e) => {

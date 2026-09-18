@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, ShieldCheck, CheckCircle2, Loader2, Landmark, Lock, CreditCard, Smartphone, Calendar, Hash, User } from 'lucide-react';
-import { foundationsData } from './Foundations';
+import { foundationsData } from '../data/foundations';
 
 // === OFFICIAL LOGOS CREATED WITH PURE CODE ===
 const PaymentLogos = {

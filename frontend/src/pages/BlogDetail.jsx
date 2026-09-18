@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { blogsData } from './Blogs';
+import { blogsData } from '../data/blogs';
 import { ArrowLeft, Calendar, User, Tag } from 'lucide-react';
 
 export default function BlogDetail() {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { 
@@ -150,7 +150,11 @@ const AnimatedAyat = () => {
 
 export default function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [user, setUser] = useState(null);
+  // Restore the signed-in user from the saved session on first render.
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem('zakatUser');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
   const location = useLocation();
   
   const [language, setLanguage] = useState('ENGLISH');
@@ -174,17 +178,18 @@ export default function App() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Close mobile menu & scroll to top on route change
-  useEffect(() => { 
-    window.scrollTo(0, 0); 
+  // Close the mobile menu when the route changes. Adjusting state during
+  // render (instead of in an effect) avoids an extra render pass.
+  const [menuPathname, setMenuPathname] = useState(location.pathname);
+  if (menuPathname !== location.pathname) {
+    setMenuPathname(location.pathname);
     setIsMobileMenuOpen(false);
-  }, [location.pathname]);
+  }
 
-  // Load User Data
+  // Scroll to top on route change
   useEffect(() => {
-    const savedUser = localStorage.getItem('zakatUser');
-    if (savedUser) setUser(JSON.parse(savedUser));
-  }, []);
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   // RTL Handling
   useEffect(() => {

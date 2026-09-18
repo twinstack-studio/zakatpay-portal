@@ -11,6 +11,8 @@ to, all in one responsive web experience.
 [**Open the live portal**](https://zakatpay-portal.vercel.app) ·
 [**Work with TwinStack Studio**](mailto:hello.twinstackstudio@gmail.com)
 
+![ZakatPay Portal homepage](./assets/zakatpay-portal.png)
+
 > **Portfolio demo:** Checkout is simulated. No payment is processed and no card
 > details are sent or stored. The charities listed are shown for demonstration
 > only; this project is not affiliated with or endorsed by any of them.
@@ -29,7 +31,7 @@ to, all in one responsive web experience.
 
 - Islamic rulings, blogs, news and video library
 - Built-in chatbot with quick replies for common zakat questions
-- Animated 3D hero and page transitions, fully responsive on mobile and tablet
+- Animated hero with floating gold and silver coins, and smooth page transitions, fully responsive on mobile and tablet
 
 ### Engineering highlights
 
@@ -43,7 +45,7 @@ to, all in one responsive web experience.
 
 | Layer | Stack |
 | --- | --- |
-| Frontend | React 19, React Router 7, Vite, Tailwind CSS 4, Framer Motion, Three.js |
+| Frontend | React 19, React Router 7, Vite, Tailwind CSS 4, Framer Motion |
 | Backend | Node.js, Express 5, Mongoose |
 | Data | MongoDB Atlas |
 | Authentication | JWT, bcrypt, email one-time codes via Nodemailer, Google OAuth |
@@ -91,6 +93,7 @@ development. All configuration is documented in
 | `backend/` | `npm start` | Start the API in production mode |
 | `backend/` | `npm run rotate` | Interactively update the secrets in `.env` |
 | `frontend/` | `npm run dev` | Start the Vite dev server |
+| `frontend/` | `npm run lint` | Check the code with ESLint |
 | `frontend/` | `npm run build` | Build the production bundle |
 
 ## Built by TwinStack Studio

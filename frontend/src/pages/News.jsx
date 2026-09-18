@@ -1,4 +1,3 @@
-import React from 'react';
 import { Newspaper, Megaphone, Clock } from 'lucide-react';
 
 const newsItems = [

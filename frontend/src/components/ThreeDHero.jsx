@@ -1,40 +1,39 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 
+function FloatingCoin({ size, top, left, right, bottom, duration, rotateDir, delay, type = 'gold', blur = 0 }) {
+  const isGold = type === 'gold';
+  const bgGradient = isGold 
+    ? "from-yellow-200 via-yellow-500 to-yellow-700" 
+    : "from-slate-100 via-slate-300 to-slate-500"; 
+  const borderColor = isGold ? "border-yellow-300/60" : "border-slate-400/50";
+  const shadow = isGold ? "shadow-[0_0_30px_rgba(234,179,8,0.3)]" : "shadow-[0_0_30px_rgba(148,163,184,0.3)]";
+  const innerBorder = isGold ? "border-yellow-200/50" : "border-slate-200/50";
+
+  return (
+    <motion.div
+      animate={{ 
+        y: [-15, 15, -15], 
+        rotate: rotateDir === 'left' ? [0, -180, -360] : [0, 180, 360] 
+      }}
+      transition={{ duration: duration, repeat: Infinity, ease: "linear", delay: delay }}
+      className={`absolute flex items-center justify-center rounded-full bg-gradient-to-br ${bgGradient} border-[1.5px] ${borderColor} ${shadow}`}
+      style={{ 
+        width: size, 
+        height: size,
+        top: top,
+        left: left,
+        right: right,
+        bottom: bottom,
+        filter: blur > 0 ? `blur(${blur}px)` : 'none',
+        zIndex: blur > 0 ? 0 : 10
+      }}
+    >
+      <div className={`w-[65%] h-[65%] rounded-full border ${innerBorder}`} />
+    </motion.div>
+  );
+}
+
 export default function ThreeDHero() {
-  const FloatingCoin = ({ size, top, left, right, bottom, duration, rotateDir, delay, type = 'gold', blur = 0 }) => {
-    const isGold = type === 'gold';
-    const bgGradient = isGold 
-      ? "from-yellow-200 via-yellow-500 to-yellow-700" 
-      : "from-slate-100 via-slate-300 to-slate-500"; 
-    const borderColor = isGold ? "border-yellow-300/60" : "border-slate-400/50";
-    const shadow = isGold ? "shadow-[0_0_30px_rgba(234,179,8,0.3)]" : "shadow-[0_0_30px_rgba(148,163,184,0.3)]";
-    const innerBorder = isGold ? "border-yellow-200/50" : "border-slate-200/50";
-
-    return (
-      <motion.div
-        animate={{ 
-          y: [-15, 15, -15], 
-          rotate: rotateDir === 'left' ? [0, -180, -360] : [0, 180, 360] 
-        }}
-        transition={{ duration: duration, repeat: Infinity, ease: "linear", delay: delay }}
-        className={`absolute flex items-center justify-center rounded-full bg-gradient-to-br ${bgGradient} border-[1.5px] ${borderColor} ${shadow}`}
-        style={{ 
-          width: size, 
-          height: size,
-          top: top,
-          left: left,
-          right: right,
-          bottom: bottom,
-          filter: blur > 0 ? `blur(${blur}px)` : 'none',
-          zIndex: blur > 0 ? 0 : 10
-        }}
-      >
-        <div className={`w-[65%] h-[65%] rounded-full border ${innerBorder}`} />
-      </motion.div>
-    );
-  };
-
   return (
     <div className="w-full h-full absolute inset-0 z-0 pointer-events-none overflow-hidden lg:overflow-visible">
       

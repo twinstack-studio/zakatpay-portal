@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Loader2, Mail, Send, ShieldCheck, Activity } from 'lucide-react';
 
@@ -16,7 +16,7 @@ const pageTransition = {
   duration: 0.5
 };
 
-export function PageWrapper({ children, title }) {
+export function PageWrapper({ children }) {
   const location = useLocation();
   
   // We no longer need the custom loading timeout since AnimatePresence handles mounting

@@ -1,8 +1,7 @@
-import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Target, Heart, Phone, Mail, Globe, CheckCircle2, TrendingUp, ExternalLink, ShieldCheck } from 'lucide-react';
 
-import { foundationsData } from './Foundations';
+import { foundationsData } from '../data/foundations';
 
 import edhiBanner from '../assets/edhi-banner.jpg';
 import saylaniBanner from '../assets/saylani-banner.jpg';

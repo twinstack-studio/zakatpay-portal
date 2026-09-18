@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Wallet, Heart, Calculator, History, 
@@ -7,29 +7,23 @@ import {
 } from 'lucide-react';
 
 export default function Dashboard({ user, onLogin }) {
-  const [recentTransactions, setRecentTransactions] = useState([]);
-  const [totalDonated, setTotalDonated] = useState(0);
-
-  useEffect(() => {
+  // Recomputed whenever the signed-in user changes.
+  const { recentTransactions, totalDonated } = useMemo(() => {
     const savedTrx = localStorage.getItem('zakatTransactions');
-    
+
     if (savedTrx && user?.email) {
       const parsedTrx = JSON.parse(savedTrx);
-      
+
       // STRICT FILTER: Sirf current user ki transactions dikhayega
       const userTransactions = parsedTrx.filter(trx => trx.userEmail === user.email);
-      
-      setRecentTransactions(userTransactions);
-      
+
       const total = userTransactions.reduce((sum, trx) => {
         const amountNum = parseInt(trx.amount.replace(/[^0-9]/g, ''));
         return sum + (amountNum || 0);
       }, 0);
-      setTotalDonated(total);
-    } else {
-      setRecentTransactions([]);
-      setTotalDonated(0);
+      return { recentTransactions: userTransactions, totalDonated: total };
     }
+    return { recentTransactions: [], totalDonated: 0 };
   }, [user]);
 
   const handleDownloadReceipt = (trx) => {
