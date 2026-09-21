@@ -9,7 +9,7 @@ zakat they owe, learn the rulings behind it, and find a trusted charity to give
 to, all in one responsive web experience.
 
 [**Open the live portal**](https://zakatpay-portal.vercel.app) ·
-[**Work with TwinStack Studio**](mailto:hello.twinstackstudio@gmail.com)
+[**Work with TwinStack Studio**](https://twinstackstudio.com/contact)
 
 ![ZakatPay Portal homepage](./assets/zakatpay-portal.png)
 
@@ -103,6 +103,6 @@ portals, automation, and AI-powered products.
 
 [GitHub](https://github.com/twinstack-studio) ·
 [Website](https://twinstackstudio.com) ·
-[Email](mailto:hello.twinstackstudio@gmail.com)
+[Email](mailto:hello@twinstackstudio.com)
 
 © 2026 TwinStack Studio. All rights reserved. See [LICENSE](./LICENSE).
