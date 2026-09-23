@@ -2,13 +2,13 @@
 
 [![CI](https://github.com/twinstack-studio/zakatpay-portal/actions/workflows/ci.yml/badge.svg)](https://github.com/twinstack-studio/zakatpay-portal/actions/workflows/ci.yml)
 [![License: All rights reserved](https://img.shields.io/badge/License-All_rights_reserved-0f766e.svg)](./LICENSE)
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Open_Portal-0f766e.svg)](https://zakatpay-portal.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Open_Portal-0f766e.svg)](https://zakatpay.twinstackstudio.com)
 
 A zakat and donation portal for Pakistan. ZakatPay helps people work out the
 zakat they owe, learn the rulings behind it, and find a trusted charity to give
 to, all in one responsive web experience.
 
-[**Open the live portal**](https://zakatpay-portal.vercel.app) ·
+[**Open the live portal**](https://zakatpay.twinstackstudio.com) ·
 [**Work with TwinStack Studio**](https://twinstackstudio.com/contact)
 
 ![ZakatPay Portal homepage](./assets/zakatpay-portal.png)
